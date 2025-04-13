@@ -1,21 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>School Event Login</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      text-align: center;
+      width: 300px;
+    }
+
+    .login-box img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    .login-box p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      border-radius: 5px;
+    }
+
+    .forgot-password {
+      text-align: right;
+      font-size: 12px;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+      text-decoration: none;
+      color: #000;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #ffffff;
+      color: #000000;
+      border: 1px solid black;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
-  <h1>Login Page</h1>
-  <script src="js/script.js"></script>
-  <form>
-    <label>Email:</label>
-    <input type="email" />
-    <label>Password:</label>
-    <input type="password" />
+
+<div class="login-box">
+  <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="University Logo">
+  <p>Please enter your details.</p>
+
+  <form action="/action_page.php" method="post">
+    <input type="text" placeholder="Username" name="uname" required>
+    <input type="password" placeholder="Password" name="psw" required>
+
+    <div class="forgot-password">
+      <a href="#">Forgot Password</a>
+    </div>
+
     <button type="submit">Login</button>
   </form>
-  
+</div>
+
 </body>
 </html>
