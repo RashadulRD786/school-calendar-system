@@ -34,13 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // 3. Hash the password
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        
         
 
         // 4. Update password in DB
         $update = "UPDATE users SET password = ? WHERE email = ?";
         $stmt = $conn->prepare($update);
-        $stmt->bind_param("ss", $hashedPassword, $email);
+        $stmt->bind_param("ss", $newPassword, $email);
 
         if ($stmt->execute()) {
             // 5. Redirect to success page
