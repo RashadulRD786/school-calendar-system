@@ -11,8 +11,8 @@ if ($conn->connect_error) {
 }
 
 // Get data
-$email = $_POST['email'];
-$password = $_POST['password'];
+$email = $_POST['Email'];
+$password = $_POST['psw'];
 
 // Look for the user
 $sql = "SELECT * FROM users WHERE email = ?";
