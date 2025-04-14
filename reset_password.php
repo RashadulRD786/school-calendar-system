@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST['Email'];
+    $email = $_POST['email'];
     $newPassword = $_POST['Npsw'];
     $confirmPassword = $_POST['Cpsw'];
 
