@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // 3. Hash the password
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
 
         // 4. Update password in DB
