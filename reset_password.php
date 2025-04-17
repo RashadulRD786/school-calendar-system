@@ -1,56 +1,52 @@
 <?php
-// Database connection
 $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
+$conn = new mysqli($host, $user, $pass, $db);
 
-$conn = new mysqli("localhost", "root", "", "school_system");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$token = $_GET['token'] ?? '';
+$email = $_GET['email'] ?? '';
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST['Email'];
-    $newPassword = $_POST['Npsw'];
-    $confirmPassword = $_POST['Cpsw'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $newPass = $_POST['new_password'];
+    $confirm = $_POST['confirm_password'];
 
-    // Sanitize input
-    $email = $conn->real_escape_string($email);
-
-    // 1. Check if user exists
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // 2. Passwords must match
-        if ($newPassword !== $confirmPassword) {
-            echo "❌ Passwords do not match.";
-            exit();
-        }
-
-        // 3. Hash the password
-        
-        
-
-        // 4. Update password in DB
-        $update = "UPDATE users SET password = ? WHERE email = ?";
-        $stmt = $conn->prepare($update);
-        $stmt->bind_param("ss", $newPassword, $email);
-
-        if ($stmt->execute()) {
-            // 5. Redirect to success page
-            header("Location: password-reset-success.html");
-            exit();
-        } else {
-            echo "❌ Failed to update password.";
-        }
-    } else {
-        echo "❌ Email not found.";
+    if ($newPass !== $confirm) {
+        die("❌ Passwords do not match.");
     }
+
+    // Verify token
+    $stmt = $conn->prepare("SELECT reset_expires FROM users WHERE email = ? AND reset_token = ?");
+    $stmt->bind_param("ss", $email, $token);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    if ($result && $result['reset_expires'] >= time()) {
+        // Update password
+        $stmt = $conn->prepare("UPDATE users SET password = ?, reset_token = NULL, reset_expires = NULL WHERE email = ?");
+        $stmt->bind_param("ss", $newPass, $email); // Add hashing if needed
+        $stmt->execute();
+
+        echo "✅ Password reset successful. You can now <a href='login.html'>login</a>.";
+    } else {
+        echo "❌ Invalid or expired token.";
+    }
+    exit();
 }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reset Password</title>
+</head>
+<body>
+  <h2>Set New Password</h2>
+  <form method="POST">
+    <input type="password" name="new_password" placeholder="New password" required><br>
+    <input type="password" name="confirm_password" placeholder="Confirm password" required><br>
+    <button type="submit">Reset Password</button>
+  </form>
+</body>
+</html>
