@@ -23,7 +23,10 @@ body {
     color: #666;
     margin-bottom: 20px;
   }
-  
+  .OTP-Box{
+    text-align: center;
+    width: 300px;
+  }
   form {
     display: flex;
     flex-direction: column;
