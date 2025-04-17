@@ -39,8 +39,8 @@ if ($result->num_rows === 1) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'sksaujana.calendar@gmail.com';
-        $mail->Password = 'sksajuna2025'; // Use Gmail App Password
+        $mail->Username = 'schoolsksajuna79@gmail.com';
+        $mail->Password = 'lubl wjba ayew cpip'; // Use Gmail App Password
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
