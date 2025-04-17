@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ss", $newPass, $email); // Add hashing if needed
         $stmt->execute();
 
-        echo "✅ Password reset successful. You can now <a href='login.html'>login</a>.";
+        echo "✅ Password reset successful. You can now <a href='index.html'>login</a>.";
     } else {
         echo "❌ Invalid or expired token.";
     }
@@ -39,14 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reset Password</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h2>Set New Password</h2>
+  <div class="OTP-Box">
+  <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="University Logo">
   <form method="POST">
     <input type="password" name="new_password" placeholder="New password" required><br>
     <input type="password" name="confirm_password" placeholder="Confirm password" required><br>
     <button type="submit">Reset Password</button>
   </form>
+  </div>
+  
 </body>
 </html>
