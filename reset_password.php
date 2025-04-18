@@ -44,15 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Set New Password</h2>
-  <div class="OTP-Box">
-  <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="University Logo">
-  <form method="POST">
-    <input type="password" name="new_password" placeholder="New password" required><br>
-    <input type="password" name="confirm_password" placeholder="Confirm password" required><br>
-    <button type="submit">Reset Password</button>
-  </form>
+<div class="container">
+  <div class="logo">
+    <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="School Logo">
   </div>
-  
+  <div class="form">
+    <h2>Set New Password</h2>
+    <form action="reset_password.php" method="POST">
+      <input type="password" name="new_password" placeholder="New password" required><br>
+      <input type="password" name="confirm_password" placeholder="Confirm password" required><br>
+      <button type="submit">Reset Password</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
