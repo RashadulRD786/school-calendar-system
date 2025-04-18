@@ -66,4 +66,46 @@ body {
   button:hover {
     background-color: #f2f2f2;
 }
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+  gap: 40px;
+  flex-wrap: wrap; /* Makes it responsive */
+  text-align: center;
+}
+
+.logo img {
+  width: 300px;
+  height: auto;
+}
+
+.form {
+  max-width: 300px;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: #d32f2f;
+}
+
   
