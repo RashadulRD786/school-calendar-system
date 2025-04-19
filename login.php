@@ -25,7 +25,7 @@ if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
 
     if ($password === $user['password']) {
-      echo "✅ Password matched";
+       header("Location: admin-dashboard.html");
       exit();
   } else {
       echo "❌ Password did not match";
