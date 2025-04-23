@@ -1,401 +1,241 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-@import url("https://fonts.googleapis.com/css?family=Wix+Madefor+Display:400,500,700,600|Lexend:300");
-
-:root {
-  --light-modetypographyheader: rgba(20, 20, 20, 1);
-}
-
+/* General Reset */
 * {
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0px;
-  height: 100%;
-}
-
-/* a blue color as a generic focus style */
-button:focus-visible {
-  outline: 2px solid #4a90e2 !important;
-  outline: -webkit-focus-ring-color auto 5px !important;
-}
-
-a {
-  text-decoration: none;
-}
-
-.desktop {
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-}
-
-.desktop .div {
-  background-color: #ffffff;
-  width: 1440px;
-  height: 1024px;
-  position: relative;
-}
-
-.desktop .overlap {
-  position: absolute;
-  width: 1440px;
-  height: 81px;
-  top: 0;
-  left: 0;
-  border-radius: 3px;
-}
-
-.desktop .frame {
-  width: 1440px;
-  height: 81px;
-  top: 0;
-  border-radius: 3px;
-  position: absolute;
-  left: 0;
-  background-color: #ffffff;
-  overflow: hidden;
-  border: 2px solid;
-  border-color: #00000026;
-}
-
-.desktop .text-wrapper {
-  position: absolute;
-  width: 304px;
-  top: 24px;
-  left: 697px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 500;
-  color: #000000a6;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .notification {
-  position: absolute;
-  width: 53px;
-  height: 57px;
-  top: 13px;
-  left: 1334px;
-}
-
-.desktop .frame-2 {
-  width: 222px;
-  height: 943px;
-  top: 81px;
-  border-radius: 0px 3px 3px 0px;
-  position: absolute;
-  left: 0;
-  background-color: #ffffff;
-  overflow: hidden;
-  border: 2px solid;
-  border-color: #00000026;
-}
-
-.desktop .overlap-group {
-  position: absolute;
-  width: 189px;
-  height: 56px;
-  top: 839px;
-  left: 16px;
-  background-color: #eb4447;
-  border-radius: 5px;
-}
-
-.desktop .text-wrapper-2 {
-  position: absolute;
-  width: 120px;
-  top: 3px;
-  left: 35px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 700;
-  color: #ffffff;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .overlap-2 {
-  position: absolute;
-  width: 222px;
-  height: 60px;
-  top: 369px;
-  left: -15px;
-}
-
-.desktop .rectangle {
-  position: absolute;
-  width: 193px;
-  height: 60px;
-  top: 0;
-  left: 29px;
-  background-color: #e7e7e7;
-  border-radius: 5px;
-  border: 2px solid;
-  border-color: #000000;
-}
-
-.desktop .admin {
-  position: absolute;
-  width: 189px;
-  top: 7px;
-  left: 0;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000a6;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .overlap-3 {
-  position: absolute;
-  width: 201px;
-  height: 56px;
-  top: 113px;
-  left: 16px;
-}
-
-.desktop .rectangle-2 {
-  position: absolute;
-  width: 189px;
-  height: 56px;
-  top: 0;
-  left: 0;
-  background-color: #ffffff;
-  border-radius: 5px;
-}
-
-.desktop .text-wrapper-3 {
-  position: absolute;
-  width: 189px;
-  top: 5px;
-  left: 12px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000a6;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .overlap-4 {
-  position: absolute;
-  width: 201px;
-  height: 59px;
-  top: 183px;
-  left: 16px;
-}
-
-.desktop .report {
-  position: absolute;
-  width: 189px;
-  top: 3px;
-  left: 12px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000a6;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .overlap-5 {
-  position: absolute;
-  width: 220px;
-  height: 59px;
-  top: 253px;
-  left: -15px;
-}
-
-.desktop .rectangle-3 {
-  position: absolute;
-  width: 189px;
-  height: 56px;
-  top: 0;
-  left: 31px;
-  background-color: #ffffff;
-  border-radius: 5px;
-}
-
-.desktop .report-2 {
-  position: absolute;
-  width: 189px;
-  top: 3px;
-  left: 0;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000a6;
-  font-size: 32px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .text-wrapper-4 {
-  position: absolute;
-  width: 170px;
-  top: 114px;
-  left: 241px;
-  font-family: "Lexend", Helvetica;
-  font-weight: 300;
-  color: var(--light-modetypographyheader);
-  font-size: 36px;
-  text-align: center;
-  letter-spacing: -0.36px;
-  line-height: 36px;
-}
-
-.desktop .overlap-6 {
-  position: absolute;
-  width: 1070px;
-  height: 332px;
-  top: 222px;
-  left: 297px;
-  background-image: url(https://c.animaapp.com/UlvFMwsf/img/rectangle-15.svg);
-  background-size: 100% 100%;
-}
-
-.desktop .overlap-7 {
-  position: absolute;
-  width: 660px;
-  height: 62px;
-  top: 208px;
-  left: 61px;
-}
-
-.desktop .rectangle-4 {
-  position: absolute;
-  width: 660px;
-  height: 33px;
-  top: 29px;
-  left: 0;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid;
-  border-color: #969696;
-}
-
-.desktop .text-wrapper-5 {
-  position: absolute;
-  width: 120px;
-  top: 0;
-  left: 0;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000;
-  font-size: 20px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .overlap-8 {
-  position: absolute;
-  width: 660px;
-  height: 70px;
-  top: 131px;
-  left: 61px;
-}
-
-.desktop .rectangle-5 {
-  position: absolute;
-  width: 660px;
-  height: 33px;
-  top: 37px;
-  left: 0;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid;
-  border-color: #969696;
-}
-
-.desktop .overlap-9 {
-  position: absolute;
-  width: 660px;
-  height: 68px;
-  top: 56px;
-  left: 61px;
-}
-
-.desktop .text-wrapper-6 {
-  position: absolute;
-  width: 75px;
-  top: 0;
-  left: 0;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 400;
-  color: #000000;
-  font-size: 20px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .rectangle-6 {
-  position: absolute;
-  width: 660px;
-  height: 33px;
-  top: 35px;
-  left: 0;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid;
-  border-color: #969696;
-}
-
-.desktop .overlap-10 {
-  position: absolute;
-  width: 310px;
-  height: 55px;
-  top: 580px;
-  left: 1098px;
-}
-
-.desktop .rectangle-7 {
-  position: absolute;
-  width: 122px;
-  height: 55px;
-  top: 0;
-  left: 0;
-  background-color: #2dc73a;
-  border-radius: 5px;
-}
-
-.desktop .text-wrapper-7 {
-  position: absolute;
-  width: 158px;
-  top: 9px;
-  left: 7px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 600;
-  color: #ffffff;
-  font-size: 27px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop .rectangle-8 {
-  position: absolute;
-  width: 122px;
-  height: 55px;
-  top: 0;
-  left: 138px;
-  background-color: #eb4447;
-  border-radius: 5px;
-}
-
-.desktop .text-wrapper-8 {
-  position: absolute;
-  width: 158px;
-  top: 7px;
-  left: 152px;
-  font-family: "Wix Madefor Display", Helvetica;
-  font-weight: 600;
-  color: #ffffff;
-  font-size: 27px;
-  letter-spacing: 0;
-  line-height: normal;
-}
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Wix Madefor Display', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  body {
+    background-color: #fff;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Dashboard Container */
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  /* Header Styles */
+  .dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 26px;
+    height: 80px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    position: relative;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logo-container {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+  }
+  
+  .logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .company-name {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .company-tagline {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .welcome-message {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .notification-container {
+    position: absolute;
+    right: 40px;
+    top: 26px;
+  }
+  
+  .notification-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .notification-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* Dashboard Layout */
+  .dashboard-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 2px solid #e8e8e8;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .nav-button {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+  
+  .nav-button:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ec4547;
+    border-top: 2px solid #e8e8e8;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fafafa;
+  }
+  
+  /* Add User Form */
+  .add-user-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid #969696; /* Added black 2px border */
+    /* Remove box-shadow if you don't want it */
+    box-shadow: none;
+  }
+  
+  .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .form-group label {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .form-input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fff;
+  }
+  
+  .form-input:focus {
+    border-color: #4a90e2;
+    outline: none;
+  }
+  
+  /* Buttons */
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 20px;
+    padding-right: 40px; /* Adjust this value to move it left a bit */
+  }
+  
+  .btn-confirm {
+    background-color: #2dc73a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 600; /* semi-bold */
+  }
+  
+  .btn-confirm:hover {
+    background-color: #24aa30;
+  }
+  
+  .btn-cancel {
+    background-color: #eb4447;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 600; /* semi-bold */
+  }
+  
+  .btn-cancel:hover {
+    background-color: #d03639;
+  }
+  
+  
+  
