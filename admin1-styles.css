@@ -152,6 +152,15 @@ body {
   flex-direction: column;
   gap: 8px;
 }
+.nav-links a {
+  text-decoration: none;
+  color: inherit; /* Optional: preserves text color */
+}
+
+.nav-links a:hover {
+  text-decoration: none;
+}
+
 
 .nav-button {
   padding: 12px 24px;
@@ -190,6 +199,16 @@ body {
 .logout-button:hover {
   background-color: #fff1f1;
 }
+
+.logout-button {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logout-button:hover {
+  text-decoration: none;
+}
+
 
 /* Main content area */
 .main-content {
@@ -423,6 +442,17 @@ body {
   cursor: pointer;
   min-height: 40px;
   position: relative;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.day-number {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
 }
 
 .calendar-day:hover {
@@ -580,6 +610,22 @@ body {
   font-size: 14px;
   color: #555;
   margin-bottom: 4px;
+}
+
+#events-container {
+  max-height: 250px;   /* You can increase or decrease based on your design */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Optional: Custom scrollbar styling */
+#events-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#events-container::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
 }
 
 .event-panel-actions {
