@@ -18,50 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       personInCharge: "",
       unit: "",
     },
-    events: [
-      {
-        id: 1,
-        title: "Team Meeting",
-        date: "2024-05-15",
-        startTime: "10:00",
-        endTime: "11:30",
-        day: "Wednesday",
-        location: "Conference Room A",
-        involvement: "All Team Members",
-        personInCharge: "John Smith",
-        unit: "Marketing",
-        description:
-          "Weekly team sync to discuss project progress and roadblocks.",
-      },
-      {
-        id: 2,
-        title: "Client Presentation",
-        date: "2024-05-22",
-        startTime: "14:00",
-        endTime: "15:30",
-        day: "Wednesday",
-        location: "Main Boardroom",
-        involvement: "Client, Executive Team",
-        personInCharge: "Sarah Johnson",
-        unit: "Sales",
-        description:
-          "Present the new dashboard design to the client for feedback.",
-      },
-      {
-        id: 3,
-        title: "Product Launch",
-        date: "2024-05-30",
-        startTime: "09:00",
-        endTime: "12:00",
-        day: "Thursday",
-        location: "Exhibition Hall",
-        involvement: "All Departments",
-        personInCharge: "Michael Brown",
-        unit: "Product",
-        description:
-          "Official launch of the new product line with press conference.",
-      },
-    ],
+    events: [],
   };
 
   let nodesToDestroy = [];
@@ -567,7 +524,11 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let day = 1; day <= daysInMonth; day++) {
       const dayCell = document.createElement("div");
       dayCell.className = "calendar-day";
-      dayCell.textContent = day;
+      const dayNumber = document.createElement("span");
+      dayNumber.className = "day-number";
+      dayNumber.textContent = day;
+      dayCell.appendChild(dayNumber);
+
 
       // Check if this day has events
       if (hasEvents(state.currentYear, state.currentMonth, day)) {
@@ -824,6 +785,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  
+
   // Initialize the application
   function init() {
     // Manually render calendar days on first load
@@ -834,8 +797,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize calendar
     initializeCalendar();
+
+    fetchEventsFromDB();
   }
 
   // Start the application
   init();
+
+  function fetchEventsFromDB() {
+    fetch("fetch_events.php")
+      .then(response => response.json())
+      .then(data => {
+        state.events = data;
+        renderCalendarDays();
+        updateEventDetailsPanel();
+      });
+  }
+  
 });
