@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin1-styles.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <div class="logo-container">
+            <img
+              src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg"
+              alt="EventFlow Logo"
+              class="logo-image"
+            />
+          </div>
+          <div class="header-text">
+            <h1 class="company-name">SK SAUJANA UTAMA</h1>
+            <p class="company-tagline">Event Management System</p>
+          </div>
+        </div>
+        <div class="welcome-message">Welcome  Admin 👋</div>
+        <div class="notification-container">
+          <button class="notification-button" data-el="button-1">
+            <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
+              <rect width="53" height="57" fill="white"></rect>
+              <path
+                d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
+                stroke="#1E1E1E"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
+                stroke="#1E1E1E"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+            <div class="notification-dropdown" data-el="div-1" hidden>
+              <h3 class="notification-title">Notifications</h3>
+              <p class="notification-message">No new notifications</p>
+            </div>
+          </button>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+        <nav class="sidebar">
+          <div class="nav-links">
+            <button class="nav-button dashboard-btn">Dashboard</button>
+            <button class="nav-button events-btn">Events</button>
+            <button class="nav-button reports-btn">Reports</button>
+            <button class="nav-button users-btn">Users</button>
+          </div>
+          <button class="logout-button">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+              <path
+                d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M16 17L21 12L16 7"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M21 12H9"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </nav>
+
+        <main class="main-content">
+          <button class="add-event-button" data-el="button-2">
+            + Add Event
+          </button>
+
+          <!-- Event Form Modal -->
+          <div class="event-form-modal" data-el="div-2" hidden>
+            <button class="close-modal-button" data-el="button-3">×</button>
+            <h2 class="modal-title">Event Details</h2>
+            <div class="form-container">
+              <div>
+                <label class="form-label">Event Name</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  data-el="input-1"
+                  data-dom-state="input-2"
+                />
+              </div>
+              <div class="form-row">
+                <div>
+                  <label class="form-label">Day</label>
+                  <input
+                    class="form-input"
+                    type="text"
+                    data-el="input-3"
+                    data-dom-state="input-4"
+                  />
+                </div>
+                <div>
+                  <label class="form-label">Date</label>
+                  <input
+                    class="form-input"
+                    type="date"
+                    data-el="input-5"
+                    data-dom-state="input-6"
+                  />
+                </div>
+                <div>
+                  <label class="form-label">Time</label>
+                  <input
+                    class="form-input"
+                    type="time"
+                    data-el="input-7"
+                    data-dom-state="input-8"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="form-label">Location</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  data-el="input-9"
+                  data-dom-state="input-10"
+                />
+              </div>
+              <div>
+                <label class="form-label">Involvement</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  data-el="input-11"
+                  data-dom-state="input-12"
+                />
+              </div>
+              <div>
+                <label class="form-label">Person In Charge</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  data-el="input-13"
+                  data-dom-state="input-14"
+                />
+              </div>
+              <div>
+                <label class="form-label">Unit</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  data-el="input-15"
+                  data-dom-state="input-16"
+                />
+              </div>
+              <div class="form-actions">
+                <button class="confirm-button" data-el="button-4">
+                  Confirm
+                </button>
+                <button class="cancel-button" data-el="button-5">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-wrapper">
+            <div class="calendar-section">
+              <div class="month-navigation">
+                <button class="nav-arrow prev-month">◀</button>
+                <div class="date-selectors">
+                  <select class="month-select" data-dom-state="select-1">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4" data-el="option-1">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                  </select>
+                  <select class="year-select" data-dom-state="select-2">
+                    <!-- Year options will be populated by JavaScript -->
+                  </select>
+                </div>
+                <button class="nav-arrow next-month">▶</button>
+              </div>
+
+              <div class="calendar-container">
+                <div class="weekdays-header">
+                  <div>Sun</div>
+                  <div>Mon</div>
+                  <div>Tue</div>
+                  <div>Wed</div>
+                  <div>Thu</div>
+                  <div>Fri</div>
+                  <div>Sat</div>
+                </div>
+                <div class="calendar-grid">
+                  <!-- Calendar days will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Details Panel -->
+            <div class="event-details-panel" id="event-details-panel">
+              <div class="event-panel-header">
+                <h2 class="event-panel-title">Event Details</h2>
+                <button class="close-panel-button" id="close-panel-button">
+                  ×
+                </button>
+              </div>
+              <div class="selected-date">
+                <h3>
+                  Selected Date:
+                  <span id="selected-date-display">No date selected</span>
+                </h3>
+              </div>
+              <div class="event-list">
+                <div class="no-events-message">
+                  No events scheduled for this date.
+                </div>
+                <div class="events-container" id="events-container">
+                  <!-- Events will be displayed here -->
+                </div>
+              </div>
+              <div class="event-panel-actions">
+                <button
+                  class="event-edit-button"
+                  id="event-edit-button"
+                  disabled
+                >
+                  Edit
+                </button>
+                <button
+                  class="event-delete-button"
+                  id="event-delete-button"
+                  disabled
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="admin script.js"></script>
+  </body>
+</html>
+
