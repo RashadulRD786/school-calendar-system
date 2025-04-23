@@ -1,26 +1,113 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="delete-confirmation.css" />
-  </head>
-  <body>
-    <div class="desktop">
-      <div class="div">
-        <img class="exclude" src="img/exclude.svg" />
-        <div class="overlap-group">
-          <p class="text-wrapper">Are you sure you want to delete ?</p>
-          <div class="overlap">
-            <div class="rectangle"></div>
-            <div class="text-wrapper-2">Delete</div>
-          </div>
-          <div class="overlap-2">
-            <div class="rectangle-2"></div>
-            <div class="text-wrapper-3">Cancel</div>
-          </div>
-        </div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Confirmation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Wix Madefor Display', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button:focus-visible {
+      outline: 2px solid #4a90e2 !important;
+      outline: -webkit-focus-ring-color auto 5px !important;
+    }
+
+    .desktop {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      background-color: #ffffff;
+    }
+
+    .confirmation-box {
+      width: 90%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      background-image: url("https://c.animaapp.com/zOPEgTaj/img/rectangle-9025.svg");
+      background-position: center;
+      border: 2px solid #000;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .text-wrapper {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #000;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .button-row {
+  display: flex;
+  gap: 80px; /* Increased gap between buttons */
+  justify-content: center;
+}
+
+
+    .btn {
+      padding: 15px 30px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-delete {
+      background-color: #eb4447;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-delete:hover {
+      background-color: #d03639;
+    }
+
+    .btn-cancel {
+      background-color: #fff;
+      color: #000;
+      border: 2px solid #000;
+    }
+
+    .btn-cancel:hover {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop">
+    <div class="confirmation-box">
+      <p class="text-wrapper">Are you sure you want to delete?</p>
+      <div class="button-row">
+        <button class="btn btn-delete">Delete</button>
+        <button class="btn btn-cancel">Cancel</button>
       </div>
     </div>
-    <script src="path/to/user-management.js"></script>
-  </body>
+  </div>
+</body>
 </html>

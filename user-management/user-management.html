@@ -80,10 +80,10 @@
           <h2 class="page-title">All Users</h2>
 
           <div class="content-header1"></div>
-          <button class="add-user-button">
+          <button id="addUserBtn" class="add-user-button">
             <span class="plus-icon">+</span>
             <span>Add User</span>
-          </button>
+          </button>          
 
           <div class="users-table-wrapper">
             <div class="table-header">
@@ -119,5 +119,14 @@
       </div>
     </div>
     <script src="user-management.js"></script>
+    <div id="deleteConfirmationModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <p class="modal-title">Are you sure you want to delete?</p>
+        <div class="modal-actions">
+          <button class="btn btn-confirm" id="confirmDeleteBtn">Confirm</button>
+          <button class="btn btn-cancel" id="cancelDeleteBtn">Cancel</button>
+        </div>
+      </div>
+    </div>    
   </body>
 </html>
