@@ -1,0 +1,98 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url("https://fonts.googleapis.com/css?family=Wix+Madefor+Display:800");
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0px;
+  height: 100%;
+}
+/* a blue color as a generic focus style */
+button:focus-visible {
+  outline: 2px solid #4a90e2 !important;
+  outline: -webkit-focus-ring-color auto 5px !important;
+}
+a {
+  text-decoration: none;
+}
+
+.desktop {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.desktop .div {
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 1440px;
+  height: 1024px;
+  position: relative;
+}
+
+.desktop .exclude {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  top: 1192px;
+  left: -3184px;
+}
+
+.desktop .overlap-group {
+  position: absolute;
+  width: 958px;
+  height: 544px;
+  top: 240px;
+  left: 241px;
+  background-image: url(https://c.animaapp.com/b7SboFol/img/rectangle-9025.svg);
+  background-size: 100% 100%;
+}
+
+.desktop .text-wrapper {
+  position: absolute;
+  width: 798px;
+  top: 241px;
+  left: 80px;
+  font-family: "Wix Madefor Display", Helvetica;
+  font-weight: 800;
+  color: #000000;
+  font-size: 47px;
+  letter-spacing: 0;
+  line-height: normal;
+  text-align: center;
+}
+
+.desktop .overlap {
+  position: absolute;
+  width: 240px;
+  height: 86px;
+  top: 364px;
+  left: 387px;
+}
+
+.desktop .rectangle {
+  position: absolute;
+  width: 184px;
+  height: 86px;
+  top: 0;
+  left: 0;
+  background-color: #eb4447;
+  border-radius: 35px;
+}
+
+.desktop .text-wrapper-2 {
+  position: absolute;
+  width: 218px;
+  top: 11px;
+  left: 22px;
+  font-family: "Wix Madefor Display", Helvetica;
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 48px;
+  letter-spacing: 0;
+  line-height: normal;
+}
