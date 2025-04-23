@@ -612,6 +612,22 @@ body {
   margin-bottom: 4px;
 }
 
+#events-container {
+  max-height: 250px;   /* You can increase or decrease based on your design */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Optional: Custom scrollbar styling */
+#events-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#events-container::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
+
 .event-panel-actions {
   display: flex;
   justify-content: space-between;
