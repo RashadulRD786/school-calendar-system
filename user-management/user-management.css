@@ -261,7 +261,7 @@ body {
     cursor: pointer;
   }
 
-  /*Pop-up delete*/
+  /*Pop-up delete button*/
 
   .modal-overlay {
   position: fixed;
