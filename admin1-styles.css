@@ -692,17 +692,16 @@ body {
   cursor: not-allowed;
 }
 
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-top: -8px;
-  margin-bottom: 10px;
-  display: block;
+.input-error {
+  border-color: red;
 }
 
-.input-error {
-  border-color: red !important;
+.error-message {
+  font-size: 0.8rem;
+  color: red;
+  margin-top: 2px;
 }
+
 
 .modal.hidden {
   display: none;
