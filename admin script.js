@@ -193,32 +193,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function onButton2Click(event) {
     resetEventForm();
     state.isEditingEvent = false;
-
-    // If a date is selected, pre-fill the date field
-    if (state.selectedDate) {
-      state.eventDetails.date = state.selectedDate.formatted;
-
-      // Get day name
-      const dayNames = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      const dayIndex = new Date(
-        state.selectedDate.year,
-        state.selectedDate.month,
-        state.selectedDate.day,
-      ).getDay();
-      state.eventDetails.day = dayNames[dayIndex];
+  
+    // If no date is selected, set it to today's date
+    if (!state.selectedDate) {
+      const today = new Date();
+      state.selectedDate = {
+        day: today.getDate(),
+        month: today.getMonth(),
+        year: today.getFullYear(),
+        formatted: formatDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
+      };
     }
-
+  
+    // Pre-fill date and day
+    state.eventDetails.date = state.selectedDate.formatted;
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayIndex = new Date(state.selectedDate.year, state.selectedDate.month, state.selectedDate.day).getDay();
+    state.eventDetails.day = dayNames[dayIndex];
+  
     state.showEventForm = true;
     update();
   }
+  
 
   // Event handler for close modal button click
   function onButton3Click(event) {
@@ -229,14 +225,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event handler for form input changes
   function onInput1Input(event) {
     state.eventDetails.name = event.target.value;
+    validateEventForm();
   }
 
   function onInput3Input(event) {
     state.eventDetails.day = event.target.value;
+    validateEventForm();
   }
 
   function onInput5Input(event) {
     state.eventDetails.date = event.target.value;
+    
 
     // Update day based on selected date
     if (event.target.value) {
@@ -257,40 +256,84 @@ document.addEventListener("DOMContentLoaded", () => {
         el.value = state.eventDetails.day;
       });
     }
+    validateEventForm();
   }
 
   function onInput7Input(event) {
     state.eventDetails.time = event.target.value;
+    validateEventForm();
   }
 
   function onInput9Input(event) {
     state.eventDetails.location = event.target.value;
+    validateEventForm();
   }
 
   function onInput11Input(event) {
     state.eventDetails.involvement = event.target.value;
+    validateEventForm();
   }
 
   function onInput13Input(event) {
     state.eventDetails.personInCharge = event.target.value;
+    validateEventForm();
   }
 
   function onInput15Input(event) {
     state.eventDetails.unit = event.target.value;
+    validateEventForm();
   }
 
-  // Event handler for confirm button click
+  function validateFormWithErrors() {
+    let isValid = true;
+  
+    const fields = [
+      { key: 'name', inputEl: 'input-1', errorEl: 'error-name', label: 'Event Name' },
+      { key: 'day', inputEl: 'input-3', errorEl: 'error-day', label: 'Day' },
+      { key: 'date', inputEl: 'input-5', errorEl: 'error-date', label: 'Date' },
+      { key: 'time', inputEl: 'input-7', errorEl: 'error-time', label: 'Time' },
+      { key: 'location', inputEl: 'input-9', errorEl: 'error-location', label: 'Location' },
+      { key: 'involvement', inputEl: 'input-11', errorEl: 'error-involvement', label: 'Involvement' },
+      { key: 'personInCharge', inputEl: 'input-13', errorEl: 'error-person', label: 'Person in Charge' },
+      { key: 'unit', inputEl: 'input-15', errorEl: 'error-unit', label: 'Unit' }
+    ];
+  
+    fields.forEach(({ key, inputEl, errorEl, label }) => {
+      const value = state.eventDetails[key];
+      const error = document.getElementById(errorEl);
+      const input = document.querySelector(`[data-el='${inputEl}']`);
+  
+      if (!value) {
+        error.textContent = `${label} is required.`;
+        error.style.color = "red";
+        input.classList.add("input-error");
+        isValid = false;
+      } else {
+        error.textContent = "";
+        input.classList.remove("input-error");
+      }
+    });
+  
+    return isValid;
+  }
+  
+
   function onButton4Click(event) {
-    
+    // ✅ Validate inputs first
+    if (!validateFormWithErrors()) {
+      return; // Stop if validation fails
+    }
+  
     if (state.isEditingEvent && state.selectedEvent) {
-      // Update existing event
+      //  Update existing event
       const eventIndex = state.events.findIndex(
-        (e) => e.id === state.selectedEvent.id,
+        (e) => e.id === state.selectedEvent.id
       );
+  
       if (eventIndex !== -1) {
         state.events[eventIndex] = {
           ...state.events[eventIndex],
-          name: state.eventDetails.name,
+          title: state.eventDetails.name,
           date: state.eventDetails.date,
           startTime: state.eventDetails.time,
           day: state.eventDetails.day,
@@ -298,58 +341,37 @@ document.addEventListener("DOMContentLoaded", () => {
           involvement: state.eventDetails.involvement,
           personInCharge: state.eventDetails.personInCharge,
           unit: state.eventDetails.unit,
+          description: state.eventDetails.name,
         };
       }
     } else {
-      // Add new event
+      //  Add new event
       const newEvent = {
-        id: Date.now(), // Use timestamp as unique ID
+        id: Date.now(), // unique ID
         title: state.eventDetails.name,
         date: state.eventDetails.date,
         startTime: state.eventDetails.time,
-        endTime: "", // Could be added to form
+        endTime: "", // optional
         day: state.eventDetails.day,
         location: state.eventDetails.location,
         involvement: state.eventDetails.involvement,
         personInCharge: state.eventDetails.personInCharge,
         unit: state.eventDetails.unit,
-        description: state.eventDetails.name, // Using name as description for simplicity
+        description: state.eventDetails.name,
       };
-
+  
       state.events.push(newEvent);
     }
-
-    function validateEventForm() {
-      const {
-        name,
-        date,
-        time,
-        day,
-        location,
-        involvement,
-        personInCharge,
-        unit
-      } = state.eventDetails;
-    
-      const confirmBtn = document.getElementById("event-confirm-button");
-      if (
-        name && date && time && day &&
-        location && involvement && personInCharge && unit
-      ) {
-        confirmBtn.disabled = false;
-      } else {
-        confirmBtn.disabled = true;
-      }
-    }
-    
-      
-
-    // Close form and update UI
+  
+    // ✅ Update UI
     state.showEventForm = false;
     renderCalendarDays();
     updateEventDetailsPanel();
     update();
   }
+  
+  
+  
 
   // Event handler for cancel button click
   function onButton5Click(event) {
@@ -370,6 +392,36 @@ document.addEventListener("DOMContentLoaded", () => {
       unit: "",
     };
   }
+
+ 
+  
+  
+
+  function validateEventForm() {
+    const {
+      name,
+      date,
+      time,
+      day,
+      location,
+      involvement,
+      personInCharge,
+      unit
+    } = state.eventDetails;
+  
+    const confirmBtn = document.getElementById("event-confirm-button");
+    if (
+      name && date && time && day &&
+      location && involvement && personInCharge && unit
+    ) {
+      confirmBtn.disabled = false;
+    } else {
+      confirmBtn.disabled = true;
+    }
+  }
+  
+  
+  
 
   // Helper text DOM nodes
   function renderTextNode(el, text) {
@@ -605,6 +657,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return state.events.filter((event) => event.date === dateString);
   }
 
+  function formatTimeWithAMPM(timeStr) {
+    if (!timeStr) return "N/A";
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const adjustedHour = hours % 12 || 12;
+    return `${adjustedHour}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+  }
+  
+
   // Update the event details panel
   function updateEventDetailsPanel() {
     const eventPanel = document.getElementById("event-details-panel");
@@ -660,13 +721,15 @@ document.addEventListener("DOMContentLoaded", () => {
             eventElement.classList.add("selected");
           }
           eventElement.innerHTML = `
-          <div class="event-time">${event.startTime}${event.endTime ? " - " + event.endTime : ""}</div>
-          <div class="event-title">${event.title}</div>
-          <div class="event-description">${event.description || ""}</div>
-          <div class="event-location"><strong>Location:</strong> ${event.location || "N/A"}</div>
-          <div class="event-person"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div>
+          <div class="event-title"><strong>${event.title}</strong></div><br>
+          <div class="event-line"><strong>Date:</strong> ${event.date} (${event.day})</div><br>
+          <div class="event-line"><strong>Time:</strong> ${formatTimeWithAMPM(event.startTime)}${event.endTime ? " - " + formatTimeWithAMPM(event.endTime) : ""}</div><br>
+          <div class="event-line"><strong>Location:</strong> ${event.location || "N/A"}</div><br>
+          <div class="event-line"><strong>Involvement:</strong> ${event.involvement || "N/A"}</div><br>
+          <div class="event-line"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div><br>
+          <div class="event-line"><strong>Unit:</strong> ${event.unit || "N/A"}</div><br>
         `;
-
+        
           // Add click event to select this event
           eventElement.addEventListener("click", () => {
             handleEventSelection(event.id);
@@ -790,25 +853,45 @@ document.addEventListener("DOMContentLoaded", () => {
     if (deleteButton) {
       deleteButton.addEventListener("click", () => {
         if (state.selectedEvent) {
-          if (
-            confirm(
-              `Are you sure you want to delete "${state.selectedEvent.title}"?`,
-            )
-          ) {
-            // Remove event from state
-            state.events = state.events.filter(
-              (e) => e.id !== state.selectedEvent.id,
-            );
-            // Reset selected event
-            state.selectedEvent = null;
-            // Update UI
-            renderCalendarDays();
-            updateEventDetailsPanel();
-          }
+          showDeleteModal();
         }
       });
     }
+    
   }
+
+  function setupDeleteConfirmation() {
+    const modal = document.getElementById("delete-modal");
+    const closeBtn = document.getElementById("delete-modal-close");
+    const confirmBtn = document.getElementById("confirm-delete");
+    const cancelBtn = document.getElementById("cancel-delete");
+  
+    const openModal = () => modal.classList.remove("hidden");
+    const closeModal = () => modal.classList.add("hidden");
+  
+    // Open modal on delete
+    const deleteButton = document.getElementById("event-delete-button");
+    if (deleteButton) {
+      deleteButton.addEventListener("click", () => {
+        if (state.selectedEvent) openModal();
+      });
+    }
+  
+    closeBtn.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+  
+    confirmBtn.addEventListener("click", () => {
+      // Delete the selected event
+      if (state.selectedEvent) {
+        state.events = state.events.filter((e) => e.id !== state.selectedEvent.id);
+        state.selectedEvent = null;
+        renderCalendarDays();
+        updateEventDetailsPanel();
+      }
+      closeModal();
+    });
+  }
+  
 
   
 
@@ -824,19 +907,13 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeCalendar();
 
     fetchEventsFromDB();
+
+    setupDeleteConfirmation();
   }
 
   // Start the application
   init();
 
-  function fetchEventsFromDB() {
-    fetch("fetch_events.php")
-      .then(response => response.json())
-      .then(data => {
-        state.events = data;
-        renderCalendarDays();
-        updateEventDetailsPanel();
-      });
-  }
+  
   
 });
