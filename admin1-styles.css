@@ -677,6 +677,89 @@ body {
   cursor: not-allowed;
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.input-error {
+  border-color: red !important;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-btn.confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal-btn.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+
+
+
 /* Make sure templates are not visible */
 template {
   display: none;
