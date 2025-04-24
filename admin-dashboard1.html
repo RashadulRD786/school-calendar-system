@@ -110,6 +110,7 @@
                   data-el="input-1"
                   data-dom-state="input-2"
                 />
+                <span id="error-name" class="error-message"></span>
               </div>
               <div class="form-row">
                 <div>
@@ -120,6 +121,7 @@
                     data-el="input-3"
                     data-dom-state="input-4"
                   />
+                  <span id="error-day" class="error-message"></span>
                 </div>
                 <div>
                   <label class="form-label">Date</label>
@@ -129,6 +131,7 @@
                     data-el="input-5"
                     data-dom-state="input-6"
                   />
+                  <span id="error-date" class="error-message"></span>
                 </div>
                 <div>
                   <label class="form-label">Time</label>
@@ -138,6 +141,7 @@
                     data-el="input-7"
                     data-dom-state="input-8"
                   />
+                  <span id="error-time" class="error-message"></span>
                 </div>
               </div>
               <div>
@@ -148,6 +152,7 @@
                   data-el="input-9"
                   data-dom-state="input-10"
                 />
+                <span id="error-location" class="error-message"></span>
               </div>
               <div>
                 <label class="form-label">Involvement</label>
@@ -157,6 +162,7 @@
                   data-el="input-11"
                   data-dom-state="input-12"
                 />
+                <span id="error-involvement" class="error-message"></span>
               </div>
               <div>
                 <label class="form-label">Person In Charge</label>
@@ -166,6 +172,8 @@
                   data-el="input-13"
                   data-dom-state="input-14"
                 />
+                <span id="error-person" class="error-message"></span>
+
               </div>
               <div>
                 <label class="form-label">Unit</label>
@@ -175,15 +183,18 @@
                   data-el="input-15"
                   data-dom-state="input-16"
                 />
+                <span id="error-unit" class="error-message"></span>
               </div>
               <div class="form-actions">
-                <button class="confirm-button" data-el="button-4">
+                <button class="confirm-button" id="event-confirm-button" disabled data-el="button-4">
                   Confirm
                 </button>
                 <button class="cancel-button" data-el="button-5">Cancel</button>
               </div>
             </div>
           </div>
+
+
 
           <div class="content-wrapper">
             <div class="calendar-section">
@@ -270,6 +281,19 @@
         </main>
       </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+<div id="delete-modal" class="modal hidden">
+  <div class="modal-content">
+    <button class="modal-close" id="delete-modal-close">×</button>
+    <h3 class="modal-title">Are you sure you want to cancel the event?</h3>
+    <div class="modal-actions">
+      <button id="confirm-delete" class="modal-btn confirm">Confirm</button>
+      <button id="cancel-delete" class="modal-btn cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
 
     <script src="admin script.js"></script>
   </body>
