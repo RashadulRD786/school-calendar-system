@@ -190,7 +190,7 @@ body {
   width: 100%;
   text-align: left;
   font-size: 16px;
-  color: #ec4547;
+  color: #ed0b0e;
   transition: all 0.2s;
   margin-top: auto;
   border-top: 2px solid #e8e8e8;
@@ -202,7 +202,7 @@ body {
 
 .logout-button {
   text-decoration: none;
-  color: inherit;
+  color: red;
 }
 
 .logout-button:hover {
@@ -358,11 +358,26 @@ body {
   background-color: #da190b;
 }
 
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.event-details-panel {
+  flex: 1;
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+
 /* Calendar section */
 .calendar-section {
-  flex: 1;
-  min-width: 0;
+  flex: 2;
+  padding: 20px;
+  max-width: 900px; /* Adjust width of the whole calendar */
 }
+
 
 .month-navigation {
   display: flex;
@@ -428,30 +443,25 @@ body {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  min-height: 400px;
+  gap: 6px;
 }
 
 .calendar-day {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
-  cursor: pointer;
-  min-height: 40px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-height: 140px; /* Make cell taller */
+  padding: 6px 6px 4px;
   position: relative;
-  box-sizing: border-box;
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
 }
 
 .day-number {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font-size: 14px;
   font-weight: bold;
+  margin-bottom: 4px;
   color: #333;
 }
 
@@ -478,6 +488,11 @@ body {
   background-color: #4a90e2;
   color: white;
   border-color: #4a90e2;
+}
+
+.calendar-day.has-events {
+  background-color: #fff; /* white or whatever neutral color you prefer */
+  border: 1px solid #ccc; /* keep border to indicate it's special */
 }
 
 .calendar-day.has-events::after {
@@ -755,6 +770,19 @@ body {
 .modal-btn.cancel {
   background-color: #f44336;
   color: white;
+}
+
+.event-label {
+  background-color: #1976d2;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  margin: 2px 0;
+  border-radius: 3px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
