@@ -607,6 +607,19 @@ document.addEventListener("DOMContentLoaded", () => {
       dayNumber.textContent = day;
       dayCell.appendChild(dayNumber);
 
+      const dateString = formatDate(state.currentYear, state.currentMonth + 1, day);
+      const eventsToday = getEventsForDate(dateString);
+    
+      if (eventsToday.length > 0) {
+        eventsToday.forEach((event) => {
+          const eventLabel = document.createElement("div");
+          eventLabel.className = "event-label";
+          eventLabel.textContent = event.title;
+          dayCell.appendChild(eventLabel);
+        });
+      }
+    
+
 
       // Check if this day has events
       if (hasEvents(state.currentYear, state.currentMonth, day)) {
@@ -651,6 +664,11 @@ document.addEventListener("DOMContentLoaded", () => {
       calendarGrid.appendChild(emptyCell);
     }
   }
+
+  function formatDate(year, month, day) {
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+  
 
   // Get events for a specific date
   function getEventsForDate(dateString) {
@@ -853,7 +871,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (deleteButton) {
       deleteButton.addEventListener("click", () => {
         if (state.selectedEvent) {
-          showDeleteModal();
+          setupDeleteConfirmation();
         }
       });
     }
@@ -891,8 +909,6 @@ document.addEventListener("DOMContentLoaded", () => {
       closeModal();
     });
   }
-  
-
   
 
   // Initialize the application
