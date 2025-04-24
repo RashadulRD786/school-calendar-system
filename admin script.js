@@ -225,12 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event handler for form input changes
   function onInput1Input(event) {
     state.eventDetails.name = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput3Input(event) {
     state.eventDetails.day = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput5Input(event) {
@@ -256,32 +256,32 @@ document.addEventListener("DOMContentLoaded", () => {
         el.value = state.eventDetails.day;
       });
     }
-    validateEventForm();
+    
   }
 
   function onInput7Input(event) {
     state.eventDetails.time = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput9Input(event) {
     state.eventDetails.location = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput11Input(event) {
     state.eventDetails.involvement = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput13Input(event) {
     state.eventDetails.personInCharge = event.target.value;
-    validateEventForm();
+    
   }
 
   function onInput15Input(event) {
     state.eventDetails.unit = event.target.value;
-    validateEventForm();
+    
   }
 
   function validateFormWithErrors() {
@@ -375,6 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event handler for cancel button click
   function onButton5Click(event) {
+    resetEventForm();
     state.showEventForm = false;
     update();
   }
@@ -391,37 +392,29 @@ document.addEventListener("DOMContentLoaded", () => {
       personInCharge: "",
       unit: "",
     };
-  }
-
- 
   
+    const fields = [
+      'input-1', 'input-3', 'input-5', 'input-7', 
+      'input-9', 'input-11', 'input-13', 'input-15'
+    ];
   
-
-  function validateEventForm() {
-    const {
-      name,
-      date,
-      time,
-      day,
-      location,
-      involvement,
-      personInCharge,
-      unit
-    } = state.eventDetails;
+    const errorSpans = [
+      'error-name', 'error-day', 'error-date', 'error-time',
+      'error-location', 'error-involvement', 'error-person', 'error-unit'
+    ];
   
-    const confirmBtn = document.getElementById("event-confirm-button");
-    if (
-      name && date && time && day &&
-      location && involvement && personInCharge && unit
-    ) {
-      confirmBtn.disabled = false;
-    } else {
-      confirmBtn.disabled = true;
-    }
+    fields.forEach((inputEl) => {
+      const input = document.querySelector(`[data-el='${inputEl}']`);
+      if (input) input.classList.remove("input-error");
+    });
+  
+    errorSpans.forEach((errorId) => {
+      const span = document.getElementById(errorId);
+      if (span) span.textContent = "";
+    });
   }
   
-  
-  
+
 
   // Helper text DOM nodes
   function renderTextNode(el, text) {
@@ -609,6 +602,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const dateString = formatDate(state.currentYear, state.currentMonth + 1, day);
       const eventsToday = getEventsForDate(dateString);
+      
+      
     
       if (eventsToday.length > 0) {
         eventsToday.forEach((event) => {
