@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     isEditingEvent: false,
     eventDetails: {
       name: "",
+      day: "",
       date: "",
       time: "",
-      day: "",
       location: "",
       involvement: "",
       personInCharge: "",
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (eventIndex !== -1) {
         state.events[eventIndex] = {
           ...state.events[eventIndex],
-          title: state.eventDetails.name,
+          name: state.eventDetails.name,
           date: state.eventDetails.date,
           startTime: state.eventDetails.time,
           day: state.eventDetails.day,
@@ -317,6 +317,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       state.events.push(newEvent);
     }
+
+      
 
     // Close form and update UI
     state.showEventForm = false;
@@ -633,14 +635,13 @@ document.addEventListener("DOMContentLoaded", () => {
           if (state.selectedEvent && state.selectedEvent.id === event.id) {
             eventElement.classList.add("selected");
           }
-
           eventElement.innerHTML = `
-            <div class="event-time">${event.startTime}${event.endTime ? " - " + event.endTime : ""}</div>
-            <div class="event-title">${event.title}</div>
-            <div class="event-description">${event.description || ""}</div>
-            <div class="event-location"><strong>Location:</strong> ${event.location || "N/A"}</div>
-            <div class="event-person"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div>
-          `;
+          <div class="event-time">${event.startTime}${event.endTime ? " - " + event.endTime : ""}</div>
+          <div class="event-title">${event.title}</div>
+          <div class="event-description">${event.description || ""}</div>
+          <div class="event-location"><strong>Location:</strong> ${event.location || "N/A"}</div>
+          <div class="event-person"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div>
+        `;
 
           // Add click event to select this event
           eventElement.addEventListener("click", () => {
