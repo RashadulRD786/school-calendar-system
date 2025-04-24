@@ -281,6 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event handler for confirm button click
   function onButton4Click(event) {
+    
     if (state.isEditingEvent && state.selectedEvent) {
       // Update existing event
       const eventIndex = state.events.findIndex(
@@ -318,6 +319,29 @@ document.addEventListener("DOMContentLoaded", () => {
       state.events.push(newEvent);
     }
 
+    function validateEventForm() {
+      const {
+        name,
+        date,
+        time,
+        day,
+        location,
+        involvement,
+        personInCharge,
+        unit
+      } = state.eventDetails;
+    
+      const confirmBtn = document.getElementById("event-confirm-button");
+      if (
+        name && date && time && day &&
+        location && involvement && personInCharge && unit
+      ) {
+        confirmBtn.disabled = false;
+      } else {
+        confirmBtn.disabled = true;
+      }
+    }
+    
       
 
     // Close form and update UI
