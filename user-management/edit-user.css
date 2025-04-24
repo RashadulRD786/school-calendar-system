@@ -237,4 +237,61 @@ body {
   background-color: #d03639;
 }
 
+/*Pop-up successsful*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 
+.modal-card {
+  background: white;
+  border-radius: 8px;
+  width: 600px;
+  padding: 30px 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  font-family: 'Wix Madefor Display', sans-serif;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-close {
+  background-color: #000000;
+  color: white;
+  border: none;
+}
+
+.btn-close:hover {
+  background-color: #000000c7;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,25 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Add user button to add-user1 after click ---
   const addUserButton = document.getElementById('addUserBtn');
-  const editButtons = document.querySelectorAll('.edit-button');
-  const deleteButtons = document.querySelectorAll('.delete-button');
-
-  const deleteModal = document.getElementById('deleteConfirmationModal'); // This modal is not present in your HTML, may want to remove
-  const successModal = document.getElementById('successModal');
-  const closeSuccessBtn = document.getElementById('closeBtn');
-
-  let rowToDelete = null;
-
   if (addUserButton) {
     addUserButton.addEventListener('click', () => {
       window.location.href = 'add-user1.html';
     });
   }
 
+  const editButtons = document.querySelectorAll('.edit-button');
   editButtons.forEach(button => {
     button.addEventListener('click', () => {
       window.location.href = 'edit-user.html';
     });
   });
+
+  // --- Delete Confirmation Modal Actions Table ---
+  const deleteButtons = document.querySelectorAll('.delete-button');
+  const deleteModal = document.getElementById('deleteConfirmationModal');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  let rowToDelete = null;
 
   deleteButtons.forEach(button => {
     button.addEventListener('click', (e) => {
@@ -29,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // These buttons do not exist in your current HTML. Remove or implement the modal if needed.
-  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
   if (cancelDeleteBtn && deleteModal) {
     cancelDeleteBtn.addEventListener('click', () => {
@@ -51,9 +47,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (closeSuccessBtn && successModal) {
-    closeSuccessBtn.addEventListener('click', () => {
-      successModal.classList.add('hidden');
-    });
-  }
 });

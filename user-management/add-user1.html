@@ -100,15 +100,42 @@
         </main>
       </div>
     </div>
-    <script src="user-management.js"></script>
     <div id="successModal" class="modal-overlay hidden">
       <div class="modal-card">
         <p class="modal-title">You successfully added new user !</p>
         <div class="modal-actions">
           <button class="btn btn-close" id="closeBtn">Close</button>
-          
         </div>
       </div>
-    </div>    
+    </div>  
+     <!-- this script for confirm and cancel button in add-user1.html after click, it will go to user-management.html  -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const confirmBtn = document.querySelector('.btn-confirm');
+        const cancelBtn = document.querySelector('.btn-cancel');
+        const successModal = document.getElementById('successModal');
+        const closeSuccessBtn = document.getElementById('closeBtn');
+    
+        if (confirmBtn && successModal && closeSuccessBtn) {
+          confirmBtn.addEventListener('click', () => {
+            successModal.classList.remove('hidden');
+          });
+    
+          closeSuccessBtn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+            window.location.href = 'user-management.html'; // Redirect after closing
+          });
+        }
+    
+        // NEW: Cancel button redirect
+        if (cancelBtn) {
+          cancelBtn.addEventListener('click', () => {
+            window.location.href = 'user-management.html'; // Redirect to user page
+          });
+        }
+      });
+    </script>
+    
+    
   </body>
 </html>
