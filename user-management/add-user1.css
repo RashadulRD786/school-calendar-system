@@ -100,16 +100,26 @@ body {
   width: 250px;
   background-color: #fff;
   border-right: 2px solid #e8e8e8;
-  padding: 20px 0;
+  padding: 20px 0 0 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: calc(100vh - 90px);
 }
 
 .nav-links {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: inherit; /* Optional: preserves text color */
+}
+
+.nav-links a:hover {
+  text-decoration: none;
 }
 
 .nav-button {
@@ -125,6 +135,13 @@ body {
 
 .nav-button:hover {
   background-color: #f5f5f5;
+  color: #000;
+}
+
+.nav-button.active {
+  background-color: #ebebeb; /* Highlight the active button */
+   /* Change text color for active button */
+  text-decoration: none; /* Remove underline */
 }
 
 .logout-button {
@@ -135,12 +152,27 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: #ec4547;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  color: #ed0b0e;
+  transition: all 0.2s;
+  margin-top: auto;
   border-top: 2px solid #e8e8e8;
 }
 
-  
-  
+.logout-button:hover {
+  background-color: #fff1f1;
+}
+
+.logout-button {
+  text-decoration: none;
+  color: red;
+}
+
+.logout-button:hover {
+  text-decoration: none;
+}
   /* Main Content */
   .main-content {
     flex: 1;
