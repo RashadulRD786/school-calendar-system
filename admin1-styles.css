@@ -789,9 +789,3 @@ body {
 }
 
 
-
-
-/* Make sure templates are not visible */
-template {
-  display: none;
-}
