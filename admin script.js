@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentYear: new Date().getFullYear(),
     selectedDate: null,
     selectedEvent: null,
-    showEventPanel: true,
+    showEventPanel: false,
     showEventForm: false,
     isEditingEvent: false,
     eventDetails: {
@@ -206,10 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     // Pre-fill date and day
-    state.eventDetails.date = state.selectedDate.formatted;
+    state.eventDetails.date = "";
     const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dayIndex = new Date(state.selectedDate.year, state.selectedDate.month, state.selectedDate.day).getDay();
-    state.eventDetails.day = dayNames[dayIndex];
+    state.eventDetails.day = "";
   
     state.showEventForm = true;
     update();
@@ -361,10 +361,20 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   
       state.events.push(newEvent);
+
+      const [year, month, day] = state.eventDetails.date.split("-").map(Number);
+state.selectedDate = {
+  year: year,
+  month: month - 1,
+  day: day,
+  formatted: state.eventDetails.date,
+};
+
     }
   
     // ✅ Update UI
     state.showEventForm = false;
+    state.showEventPanel = true;
     renderCalendarDays();
     updateEventDetailsPanel();
     update();
@@ -494,8 +504,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Format date as YYYY-MM-DD
   function formatDate(year, month, day) {
-    return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    return `${String(day).padStart(2, "0")}-${String(month + 1).padStart(2, "0")}-${year}`;
   }
+  
 
   // Check if a date has events
   function hasEvents(year, month, day) {
@@ -735,7 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           eventElement.innerHTML = `
           <div class="event-title"><strong>${event.title}</strong></div><br>
-          <div class="event-line"><strong>Date:</strong> ${event.date} (${event.day})</div><br>
+          <div class="event-line"><strong>Date:</strong> ${formatDateForDisplay(event.date)} (${event.day})</div><br>
           <div class="event-line"><strong>Time:</strong> ${formatTimeWithAMPM(event.startTime)}${event.endTime ? " - " + formatTimeWithAMPM(event.endTime) : ""}</div><br>
           <div class="event-line"><strong>Location:</strong> ${event.location || "N/A"}</div><br>
           <div class="event-line"><strong>Involvement:</strong> ${event.involvement || "N/A"}</div><br>
@@ -771,7 +782,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update action buttons
     updateEventActionButtons();
   }
-
+  function formatDateForDisplay(dateStr) {
+    const [year, month, day] = dateStr.split("-");
+    return `${day}-${month}-${year}`;
+  }
+  
   // Initialize calendar with navigation
   function initializeCalendar() {
     // Add event listeners for month navigation
