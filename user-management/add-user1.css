@@ -325,13 +325,7 @@ body {
     background-color: #000000c7;
   }
 
-  .required-message {
-    display: block;
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 5px;
-  }
-  
   .hidden {
     display: none;
   }
+ 

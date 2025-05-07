@@ -81,24 +81,18 @@
             <div class="form-section">
               <div class="form-group">
                 <label>Email</label>
-                <input type="email" class="form-input" id="email" placeholder="Enter email" />
-                <span class="required-message hidden" style="color: red;">Email is required</span>
+                <input type="email" class="form-input" placeholder="Enter email" />
               </div>
               <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-input" id="password" placeholder="Enter password" />
-                <span class="required-message hidden" style="color: red;">Password is required</span>
+                <input type="password" class="form-input" placeholder="Enter password" />
               </div>
               <div class="form-group">
                 <label>Role</label>
-                <select class="form-input" id="role">
-                  <option value="" disabled selected>Select a role</option>
-                  <option value="Teacher">Admin</option>
-                  <option value="Admin">Teacher</option>
-                </select>
-                <span class="required-message hidden" style="color: red;">Role is required</span>
+                <input type="text" class="form-input" placeholder="Enter role" />
               </div>
-              
+            </div>
+          </div>
           <div class="form-buttons">
             <button class="btn-confirm">Confirm</button>
             <button class="btn-cancel">Cancel</button>
@@ -114,68 +108,32 @@
         </div>
       </div>
     </div>  
-
      <!-- this script for confirm and cancel button in add-user1.html after click, it will go to user-management.html  -->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-  const requiredMessages = document.querySelectorAll('.required-message');
-
-  // Ensure all error messages are hidden on page load
-  requiredMessages.forEach(message => message.classList.add('hidden'));
-
-  const confirmBtn = document.querySelector('.btn-confirm');
-  const cancelBtn = document.querySelector('.btn-cancel');
-  const successModal = document.getElementById('successModal');
-  const closeSuccessBtn = document.getElementById('closeBtn');
-
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const roleSelect = document.getElementById('role');
-
-  if (confirmBtn && successModal && closeSuccessBtn) {
-    confirmBtn.addEventListener('click', () => {
-      let isValid = true;
-
-      // Reset all error messages
-      requiredMessages.forEach(message => message.classList.add('hidden'));
-
-      // Validate email
-      if (!emailInput.value.trim()) {
-        document.querySelector('#email + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Validate password
-      if (!passwordInput.value.trim()) {
-        document.querySelector('#password + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Validate role
-      if (!roleSelect.value.trim()) {
-        document.querySelector('#role + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Show success modal if all fields are valid
-      if (isValid) {
-        successModal.classList.remove('hidden');
-      }
-    });
-
-    closeSuccessBtn.addEventListener('click', () => {
-      successModal.classList.add('hidden');
-      window.location.href = 'user-management.html'; // Redirect after closing
-    });
-  }
-
-  // Cancel button redirect
-  if (cancelBtn) {
-    cancelBtn.addEventListener('click', () => {
-      window.location.href = 'user-management.html'; // Redirect to user page
-    });
-  }
-});
-    </script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const confirmBtn = document.querySelector('.btn-confirm');
+        const cancelBtn = document.querySelector('.btn-cancel');
+        const successModal = document.getElementById('successModal');
+        const closeSuccessBtn = document.getElementById('closeBtn');
+    
+        if (confirmBtn && successModal && closeSuccessBtn) {
+          confirmBtn.addEventListener('click', () => {
+            successModal.classList.remove('hidden');
+          });
+    
+          closeSuccessBtn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+            window.location.href = 'user-management.html'; // Redirect after closing
+          });
+        }
+    
+        // NEW: Cancel button redirect
+        if (cancelBtn) {
+          cancelBtn.addEventListener('click', () => {
+            window.location.href = 'user-management.html'; // Redirect to user page
+          });
+        }
+      });
+    </script>    
   </body>
 </html>
