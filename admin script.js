@@ -24,6 +24,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let nodesToDestroy = [];
   let pendingUpdate = false;
 
+  function fetchEventsFromDB() {
+    fetch("get_events.php")
+      .then((res) => res.json())
+      .then((data) => {
+        state.events = data.map((event) => ({
+          id: event.id,
+          title: event.name,
+          date: event.date,
+          startTime: event.time,
+          day: event.day,
+          location: event.location,
+          involvement: event.involvement,
+          personInCharge: event.person_in_charge,
+          unit: event.unit,
+          description: event.name,
+        }));
+  
+        renderCalendarDays();
+        updateEventDetailsPanel();
+      })
+      .catch((err) => {
+        console.error("❌ Failed to load events:", err);
+      });
+  }
+  
+
   function destroyAnyNodes() {
     // destroy current view template refs before rendering again
     nodesToDestroy.forEach((el) => el.remove());
@@ -320,56 +346,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function onButton4Click(event) {
     // ✅ Validate inputs first
-    if (!validateFormWithErrors()) {
-      return; // Stop if validation fails
-    }
+    if (!validateFormWithErrors()) return;
+  
+    const updatedEvent = {
+      name: state.eventDetails.name,
+      day: state.eventDetails.day,
+      date: state.eventDetails.date,
+      time: state.eventDetails.time,
+      location: state.eventDetails.location,
+      involvement: state.eventDetails.involvement,
+      person_in_charge: state.eventDetails.personInCharge,
+      unit: state.eventDetails.unit
+    };
   
     if (state.isEditingEvent && state.selectedEvent) {
-      //  Update existing event
+      
       const eventIndex = state.events.findIndex(
         (e) => e.id === state.selectedEvent.id
       );
   
       if (eventIndex !== -1) {
-        state.events[eventIndex] = {
+        const updated = {
           ...state.events[eventIndex],
-          title: state.eventDetails.name,
-          date: state.eventDetails.date,
-          startTime: state.eventDetails.time,
-          day: state.eventDetails.day,
-          location: state.eventDetails.location,
-          involvement: state.eventDetails.involvement,
-          personInCharge: state.eventDetails.personInCharge,
-          unit: state.eventDetails.unit,
-          description: state.eventDetails.name,
+          title: updatedEvent.name,
+          date: updatedEvent.date,
+          startTime: updatedEvent.time,
+          day: updatedEvent.day,
+          location: updatedEvent.location,
+          involvement: updatedEvent.involvement,
+          personInCharge: updatedEvent.person_in_charge,
+          unit: updatedEvent.unit,
+          description: updatedEvent.name,
         };
+  
+        state.events[eventIndex] = updated;
       }
+  
+      // 🔄 Send update to server
+      fetch("edit_event.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          id: state.selectedEvent.id,
+          ...updatedEvent,
+        }),
+      })
+        .then((res) => res.text())
+        .then((resText) => {
+          console.log("Edit response:", resText);
+          fetchEventsFromDB(); // reload fresh events from database
+        })
+        .catch((err) => console.error("Edit failed:", err));
     } else {
-      //  Add new event
+      // ➕ Add new event
       const newEvent = {
-        id: Date.now(), // unique ID
-        title: state.eventDetails.name,
-        date: state.eventDetails.date,
-        startTime: state.eventDetails.time,
-        endTime: "", // optional
-        day: state.eventDetails.day,
-        location: state.eventDetails.location,
-        involvement: state.eventDetails.involvement,
-        personInCharge: state.eventDetails.personInCharge,
-        unit: state.eventDetails.unit,
-        description: state.eventDetails.name,
+        id: Date.now(),
+        title: updatedEvent.name,
+        date: updatedEvent.date,
+        startTime: updatedEvent.time,
+        endTime: "",
+        day: updatedEvent.day,
+        location: updatedEvent.location,
+        involvement: updatedEvent.involvement,
+        personInCharge: updatedEvent.person_in_charge,
+        unit: updatedEvent.unit,
+        description: updatedEvent.name,
       };
   
       state.events.push(newEvent);
-
-      const [year, month, day] = state.eventDetails.date.split("-").map(Number);
-state.selectedDate = {
-  year: year,
-  month: month - 1,
-  day: day,
-  formatted: state.eventDetails.date,
-};
-
+  
+      // 📨 Send new event to server
+      submitEventToServer(updatedEvent);
+  
+      // 🔁 Set selectedDate
+      const [year, month, day] = updatedEvent.date.split("-").map(Number);
+      state.selectedDate = {
+        year,
+        month: month - 1,
+        day,
+        formatted: updatedEvent.date,
+      };
     }
   
     // ✅ Update UI
@@ -379,6 +437,26 @@ state.selectedDate = {
     updateEventDetailsPanel();
     update();
   }
+  
+
+function submitEventToServer(data) {
+    fetch("add_event.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(data),
+    })
+      .then((response) => response.text())
+      .then((result) => {
+        console.log("✅ Server response:", result);
+        fetchEventsFromDB(); // reload events from DB after saving
+      })
+      .catch((error) => {
+        console.error("❌ Failed to submit event:", error);
+      });
+  }
+  
   
   
   
@@ -909,15 +987,28 @@ state.selectedDate = {
     cancelBtn.addEventListener("click", closeModal);
   
     confirmBtn.addEventListener("click", () => {
-      // Delete the selected event
       if (state.selectedEvent) {
-        state.events = state.events.filter((e) => e.id !== state.selectedEvent.id);
-        state.selectedEvent = null;
-        renderCalendarDays();
-        updateEventDetailsPanel();
+        fetch("delete_event.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: new URLSearchParams({ id: state.selectedEvent.id })
+        })
+          .then(res => res.text())
+          .then(data => {
+            console.log(data);
+            state.events = state.events.filter(e => e.id !== state.selectedEvent.id);
+            state.selectedEvent = null;
+            renderCalendarDays();
+            updateEventDetailsPanel();
+          })
+          .catch(err => console.error("Delete failed:", err));
       }
-      closeModal();
+    
+      document.getElementById("delete-modal").classList.add("hidden");
     });
+    
   }
   
 
