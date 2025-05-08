@@ -231,6 +231,30 @@ body {
   outline: none;
 }
 
+/* Styling for the dropdown */
+select.form-input {
+  appearance: none; /* Removes default browser styling */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+select.form-input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+select.form-input option:disabled {
+  color: #555; /* Match the color of the Role label */
+}
+
+select.form-input option[value=""][disabled] {
+  color: #555; /* Match the color of the Role label */
+}
+
 /* Buttons */
 .form-buttons {
   display: flex;
