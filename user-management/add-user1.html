@@ -1,181 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="add-user1.css" />
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <header class="dashboard-header">
-        <div class="header-left">
-          <div class="logo-container">
-            <img
-              src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg"
-              alt="EventFlow Logo"
-              class="logo-image"
-            />
-          </div>
-          <div class="header-text">
-            <h1 class="company-name">SK SAUJANA UTAMA</h1>
-            <p class="company-tagline">Event Management System</p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add User - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="add-user1.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <div class="logo-container">
+          <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="EventFlow Logo" class="logo-image" />
         </div>
-        <div class="welcome-message">Welcome Admin 👋</div>
-        <div class="notification-container">
-          <button class="notification-button">
-            <img
-              src="https://c.animaapp.com/d3SSWScQ/img/notification-03.svg"
-              alt="Notification Icon"
-              class="notification-icon"
-            />
-          </button>
+        <div class="header-text">
+          <h1 class="company-name">SK SAUJANA UTAMA</h1>
+          <p class="company-tagline">Event Management System</p>
         </div>
-      </header>
+      </div>
+      <div class="welcome-message">Welcome Admin 👋</div>
+      <div class="notification-container">
+        <button class="notification-button">
+          <img src="https://c.animaapp.com/d3SSWScQ/img/notification-03.svg" alt="Notification Icon" class="notification-icon" />
+        </button>
+      </div>
+    </header>
 
-      <div class="dashboard-content">
-        <nav class="sidebar">
-          <div class="nav-links">
-            <button class="nav-button dashboard-btn">Dashboard</button>
-            <button class="nav-button events-btn">Events</button>
-            <button class="nav-button reports-btn">Reports</button>
-            <a href="user-management.html" class="nav-button users-btn active">Users</a>
-          </div>
-          <button class="logout-button">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-              <path
-                d="M16 17L21 12L16 7"
-                stroke="#ec4547"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M21 12H9"
-                stroke="#ec4547"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H12"
-                stroke="#ec4547"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span>Logout</span>
-          </button>
-        </nav>
+    <div class="dashboard-content">
+      <nav class="sidebar">
+        <div class="nav-links">
+          <a href="../admin-dashboard1.html" class="nav-button dashboard-btn">Dashboard</a>
+          <button class="nav-button events-btn">Events</button>
+          <button class="nav-button reports-btn">Reports</button>
+          <a href="user-management.php" class="nav-button users-btn active">Users</a>
+        </div>
+        <button class="logout-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+            <path d="M16 17L21 12L16 7" stroke="#ec4547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M21 12H9" stroke="#ec4547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H12" stroke="#ec4547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Logout</span>
+        </button>
+      </nav>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-          <h2 class="section-title">Add User</h2>
-          <div class="add-user-content"> 
+      <main class="main-content">
+        <h2 class="section-title">Add User</h2>
+        <div class="add-user-content">
+          <form action="add-user.php" method="POST" id="addUserForm">
             <div class="form-section">
               <div class="form-group">
                 <label>Email</label>
-                <input type="email" class="form-input" id="email" placeholder="Enter email" />
+                <input type="email" name="email" class="form-input" id="email" placeholder="Enter email" required />
                 <span class="required-message hidden" style="color: red;">Email is required</span>
               </div>
               <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-input" id="password" placeholder="Enter password" />
+                <input type="password" name="password" class="form-input" id="password" placeholder="Enter password" required />
                 <span class="required-message hidden" style="color: red;">Password is required</span>
               </div>
               <div class="form-group">
                 <label>Role</label>
-                <select class="form-input" id="role">
+                <select name="role" class="form-input" id="role" required>
                   <option value="" disabled selected>Select a role</option>
-                  <option value="Teacher">Admin</option>
-                  <option value="Admin">Teacher</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Teacher">Teacher</option>
                 </select>
                 <span class="required-message hidden" style="color: red;">Role is required</span>
               </div>
-              
-          <div class="form-buttons">
-            <button class="btn-confirm">Confirm</button>
-            <button class="btn-cancel">Cancel</button>
-          </div>
-        </main>
-      </div>
-    </div>
-    <div id="successModal" class="modal-overlay hidden">
-      <div class="modal-card">
-        <p class="modal-title">You successfully added new user !</p>
-        <div class="modal-actions">
-          <button class="btn btn-close" id="closeBtn">Close</button>
+            </div>
+            <div class="form-buttons">
+              <button type="submit" class="btn-confirm">Confirm</button>
+              <button type="button" class="btn-cancel">Cancel</button>
+            </div>
+          </form>
         </div>
-      </div>
-    </div>  
+      </main>
+    </div>
+  </div>
 
-     <!-- this script for confirm and cancel button in add-user1.html after click, it will go to user-management.html  -->
-    <script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
-  const requiredMessages = document.querySelectorAll('.required-message');
+      const cancelBtn = document.querySelector('.btn-cancel');
+      const form = document.getElementById('addUserForm');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const role = document.getElementById('role');
+      const requiredMessages = document.querySelectorAll('.required-message');
 
-  // Ensure all error messages are hidden on page load
-  requiredMessages.forEach(message => message.classList.add('hidden'));
+      form.addEventListener('submit', (e) => {
+        let valid = true;
+        requiredMessages.forEach(msg => msg.classList.add('hidden'));
 
-  const confirmBtn = document.querySelector('.btn-confirm');
-  const cancelBtn = document.querySelector('.btn-cancel');
-  const successModal = document.getElementById('successModal');
-  const closeSuccessBtn = document.getElementById('closeBtn');
+        if (!email.value.trim()) {
+          document.querySelector('#email + .required-message').classList.remove('hidden');
+          valid = false;
+        }
 
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const roleSelect = document.getElementById('role');
+        if (!password.value.trim()) {
+          document.querySelector('#password + .required-message').classList.remove('hidden');
+          valid = false;
+        }
 
-  if (confirmBtn && successModal && closeSuccessBtn) {
-    confirmBtn.addEventListener('click', () => {
-      let isValid = true;
+        if (!role.value.trim()) {
+          document.querySelector('#role + .required-message').classList.remove('hidden');
+          valid = false;
+        }
 
-      // Reset all error messages
-      requiredMessages.forEach(message => message.classList.add('hidden'));
+        if (!valid) {
+          e.preventDefault(); // Stop form submission if invalid
+        }
+      });
 
-      // Validate email
-      if (!emailInput.value.trim()) {
-        document.querySelector('#email + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Validate password
-      if (!passwordInput.value.trim()) {
-        document.querySelector('#password + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Validate role
-      if (!roleSelect.value.trim()) {
-        document.querySelector('#role + .required-message').classList.remove('hidden');
-        isValid = false;
-      }
-
-      // Show success modal if all fields are valid
-      if (isValid) {
-        successModal.classList.remove('hidden');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          window.location.href = 'user-management.php';
+        });
       }
     });
-
-    closeSuccessBtn.addEventListener('click', () => {
-      successModal.classList.add('hidden');
-      window.location.href = 'user-management.html'; // Redirect after closing
-    });
-  }
-
-  // Cancel button redirect
-  if (cancelBtn) {
-    cancelBtn.addEventListener('click', () => {
-      window.location.href = 'user-management.html'; // Redirect to user page
-    });
-  }
-});
-    </script>
-  </body>
+  </script>
+</body>
 </html>
