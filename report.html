@@ -304,19 +304,20 @@
 
       <div class="container">
         <h2>Report Export</h2>
-        <form id="exportForm" method="POST" action="report.php">
+              <form id="exportForm" method="POST" action="report.php">
           <div class="form-group">
-            <label for="startDate">From Date</label>
-            <input type="date" id="startDate" name="startDate" required />
+            <label for="from">From Date</label>
+            <input type="date" id="from" name="from" required />
           </div>
           <div class="form-group">
-            <label for="endDate">To Date</label>
-            <input type="date" id="endDate" name="endDate" required />
+            <label for="to">To Date</label>
+            <input type="date" id="to" name="to" required />
           </div>
           <div class="button-group">
-            <button type="submit" class="btn-export">Export to Excel</button>
+            <button type="submit" class="btn-export">Export</button>
           </div>
         </form>
+
       </div>
     </div>
   </div>
