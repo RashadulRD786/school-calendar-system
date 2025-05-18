@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Export - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Wix Madefor Display", sans-serif;
+      background-color: #fff;
+    }
+
+    .dashboard-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      background-color: #fff;
+      overflow: hidden;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 26px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+      background-color: #fff;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-container {
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .company-name {
+      font-size: 26px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .company-tagline {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .welcome-message {
+      font-size: 20px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .notification-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .notification-button {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .notification-button:hover {
+      background-color: #f5f5f5;
+    }
+
+    .notification-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .notification-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0px;
+      width: 300px;
+      background-color: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      z-index: 10;
+    }
+
+    .notification-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .notification-message {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .dashboard-content {
+      display: flex;
+      flex: 1;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #fff;
+      border-right: 2px solid #e8e8e8;
+      padding: 20px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: calc(100vh - 90px);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-button {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-size: 16px;
+      color: #333;
+      transition: all 0.2s;
+    }
+
+    .nav-button:hover {
+      background-color: #f5f5f5;
+      color: #000;
+    }
+
+    .nav-button.active {
+      background-color: #ebebeb;
+    }
+
+    .logout-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-size: 16px;
+      color: #ed0b0e;
+      transition: all 0.2s;
+      border-top: 2px solid #e8e8e8;
+      text-decoration: none;
+    }
+
+    .logout-button:hover {
+      background-color: #fff1f1;
+    }
+
+    .container {
+      flex: 1;
+      padding: 40px;
+      background-color: #fafafa;
+    }
+
+    .container h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .form-group input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+  }
+
+
+    .button-group {
+      margin-top: 20px;
+    }
+
+    .btn-export {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-export:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <div class="logo-container">
+          <img
+            src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg"
+            alt="EventFlow Logo"
+            class="logo-image"
+          />
+        </div>
+        <div class="header-text">
+          <h1 class="company-name">SK SAUJANA UTAMA</h1>
+          <p class="company-tagline">Event Management System</p>
+        </div>
+      </div>
+      <div class="welcome-message">Welcome Admin 👋</div>
+      <div class="notification-container">
+        <button class="notification-button" data-el="button-1">
+          <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
+            <rect width="53" height="57" fill="white"></rect>
+            <path
+              d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
+              stroke="#1E1E1E"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
+              stroke="#1E1E1E"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <nav class="sidebar">
+        <div class="nav-links">
+          <a href="admin-dashboard1.html" class="nav-button dashboard-btn">Dashboard</a>
+         
+          <a href="reports.html" class="nav-button reports-btn active">Reports</a>
+          <a href="user-management/user-management.php" class="nav-button users-btn">Users</a>
+        </div>
+        <a href="index.html" class="logout-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <div class="container">
+        <h2>Report Export</h2>
+              <form id="exportForm" method="POST" action="report.php">
+          <div class="form-group">
+            <label for="from">From Date</label>
+            <input type="date" id="from" name="from" required />
+          </div>
+          <div class="form-group">
+            <label for="to">To Date</label>
+            <input type="date" id="to" name="to" required />
+          </div>
+                    <div class="form-group">
+              <label for="status">Status:</label>
+              <select name="status" id="status">
+                <option value="any">Any</option>
+                <option value="Complete">Complete</option>
+                <option value="Non-Complete">Non-Complete</option>
+              </select>
+
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn-export">Export</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
