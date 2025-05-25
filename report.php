@@ -9,7 +9,11 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
+<<<<<<< HEAD
 $conn = new mysqli($host, $user, $pass, $db,3307);
+=======
+$conn = new mysqli($host, $user, $pass, $db);
+>>>>>>> 5ddfb305a158c9574ee477c7d14a6ed5ea099c2c
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -85,4 +89,8 @@ $writer = new Xlsx($spreadsheet);
 $writer->save('php://output');
 exit;
 
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> 5ddfb305a158c9574ee477c7d14a6ed5ea099c2c
