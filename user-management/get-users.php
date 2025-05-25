@@ -9,7 +9,7 @@ if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }
 
-$sql = "SELECT id, email FROM user_management";
+$sql = "SELECT id, email FROM users";
 $result = $conn->query($sql);
 
 $users = [];

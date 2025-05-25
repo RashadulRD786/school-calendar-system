@@ -10,14 +10,15 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
     $email = $_POST['email'];
-    $plainPassword = $_POST['password'];
+    $password = $_POST['password'];
     $role = $_POST['role'];
 
-    $hashedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
+    
 
-    $stmt = $conn->prepare("INSERT INTO user_management (email, password, role) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $email, $hashedPassword, $role);
+    $stmt = $conn->prepare("INSERT INTO users (email, password, role, name) VALUES (?, ?, ?,?)");
+    $stmt->bind_param("ssss", $email, $password, $role,$name);
 
     if ($stmt->execute()) {
         // Redirect to user-management.php after successful insertion

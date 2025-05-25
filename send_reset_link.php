@@ -10,7 +10,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$conn = new mysqli($host, $user, $pass, $db);
+$conn = new mysqli($host, $user, $pass, $db,3307);
 if ($conn->connect_error) die("DB error: " . $conn->connect_error);
 
 $email = $_POST['email'];
@@ -52,7 +52,7 @@ if ($result->num_rows === 1) {
         $mail->Body    = "Click the link below to reset your password:<br><a href='$reset_link'>$reset_link</a><br>This link will expire in 30 minutes.";
 
         $mail->send();
-        echo "✅ Reset link sent. Please check your email.";
+        
     } catch (Exception $e) {
         echo "❌ Email failed: " . $mail->ErrorInfo;
     }
@@ -62,3 +62,30 @@ if ($result->num_rows === 1) {
 
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Link Sent</title>
+  <link rel="stylesheet" href="style.css"> <!-- reuse login page CSS -->
+  <style>
+    .success-message {
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="School Logo">
+  <p class="success-message">✅ Reset link sent. Please check your email.</p>
+
+  
+</div>
+
+</body>
+</html>
+

@@ -1,57 +1,75 @@
 <?php
 $host = 'localhost';
 $user = 'root';
-$pass = ''; // default for XAMPP
-$dbname = 'school-system';
+$pass = '';
+$dbname = 'school_system';
 
-$conn = new mysqli($host, $user, $pass, $dbname,3307);
+$conn = new mysqli($host, $user, $pass, $dbname, 3307);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle POST request
+// Handle POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['id'], $_POST['email'], $_POST['password'])) {
+    if (isset($_POST['id'], $_POST['email'], $_POST['password'], $_POST['name'], $_POST['role'])) {
         $id = intval($_POST['id']);
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        $name = trim($_POST['name']);
+        $role = trim($_POST['role']);
 
-        // UPDATE user
-        $stmt = $conn->prepare("UPDATE user_management SET email = ?, password = ? WHERE id = ?");
-        $stmt->bind_param("ssi", $email, $password, $id);
+        $stmt = $conn->prepare("UPDATE users SET email = ?, password = ?, name = ?, role = ? WHERE id = ?");
+        $stmt->bind_param("ssssi", $email, $password, $name, $role, $id);
 
         if ($stmt->execute()) {
-            // Redirect to user list after success
             header("Location: user-management.php");
             exit();
         } else {
             echo "Error updating user: " . $stmt->error;
         }
+        $stmt->close();
     } else {
         echo "Missing required fields.";
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-    // Load user data for form
+}
+
+// Handle GET (Show Form)
+elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $stmt = $conn->prepare("SELECT email FROM user_management WHERE id = ?");
+    $stmt = $conn->prepare("SELECT email, name, role FROM users WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $stmt->bind_result($email);
-    $stmt->fetch();
+    $stmt->bind_result($email, $name, $role);
+
+    if ($stmt->fetch()) {
+        // Show the form only if data exists
+        ?>
+        <form method="POST" action="edit-user.php">
+            <input type="hidden" name="id" value="<?php echo $id; ?>">
+
+            <label>Name:</label>
+            <input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>" required><br>
+
+            <label>Email:</label>
+            <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required><br>
+
+            <label>Password:</label>
+            <input type="password" name="password" required><br>
+
+            <label>Role:</label>
+            <select name="role" required>
+                <option value="Admin" <?php echo ($role === 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                <option value="Teacher" <?php echo ($role === 'Teacher') ? 'selected' : ''; ?>>Teacher</option>
+            </select><br><br>
+
+            <button type="submit">Update</button>
+        </form>
+        
+        <?php
+    } else {
+        echo "User not found.";
+    }
     $stmt->close();
-    ?>
-
-    <!-- Basic Edit Form -->
-    <form method="POST" action="edit-user.php">
-        <input type="hidden" name="id" value="<?php echo $id; ?>">
-        <label>Email:</label>
-        <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required><br>
-        <label>Password:</label>
-        <input type="password" name="password" required><br>
-        <button type="submit">Update</button>
-    </form>
-
-    <?php
 } else {
     echo "Invalid request.";
 }

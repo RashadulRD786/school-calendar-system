@@ -224,6 +224,16 @@
       border-radius: 6px;
     }
 
+    .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+  }
+
+
     .button-group {
       margin-top: 20px;
     }
@@ -313,6 +323,16 @@
             <label for="to">To Date</label>
             <input type="date" id="to" name="to" required />
           </div>
+                    <div class="form-group">
+              <label for="status">Status:</label>
+              <select name="status" id="status">
+                <option value="any">Any</option>
+                <option value="Complete">Complete</option>
+                <option value="Non-Complete">Non-Complete</option>
+              </select>
+
+          </div>
+
           <div class="button-group">
             <button type="submit" class="btn-export">Export</button>
           </div>

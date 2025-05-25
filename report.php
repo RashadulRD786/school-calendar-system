@@ -1,75 +1,88 @@
 <?php
-// Enable error reporting (for debugging - disable in production)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require 'vendor/autoload.php'; // PhpSpreadsheet autoloader
 
-// Database credentials
-$servername = "localhost";
-$username = "root"; // Update if your phpMyAdmin username is different
-$password = "";     // Update with your actual password
-$database = "school_system"; // Your actual database name
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database,3307);
+// Database connection
+$host = 'localhost';
+$db = 'school_system';
+$user = 'root';
+$pass = '';
+$conn = new mysqli($host, $user, $pass, $db,3307);
 
-// Check for DB connection errors
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Get dates from POST
-$startDate = $_POST['startDate'] ?? null;
-$endDate = $_POST['endDate'] ?? null;
+// Get date range and status from the form
+$from = $_POST['from'] ?? '';
+$to = $_POST['to'] ?? '';
+$status = $_POST['status'] ?? 'any';
 
-// Validate date inputs
-if (!$startDate || !$endDate) {
-    die("Error: Start date and end date are required.");
+if (!$from || !$to) {
+    die("Please provide both 'from' and 'to' dates.");
 }
 
-// Prepare SQL query
-$query = "SELECT * FROM events WHERE date BETWEEN ? AND ?";
-$stmt = $conn->prepare($query);
-
-if (!$stmt) {
-    die("Prepare failed: " . $conn->error);
+// Query events based on date and status
+if ($status === 'Complete') {
+    $stmt = $conn->prepare("SELECT name, day, date, time, location, involvement, person_in_charge, unit, status FROM events WHERE date BETWEEN ? AND ? AND status = ?");
+    $stmt->bind_param("sss", $from, $to, $status);
+} elseif ($status === 'Non-Complete') {
+    $excluded = 'Complete';
+    $stmt = $conn->prepare("SELECT name, day, date, time, location, involvement, person_in_charge, unit, status FROM events WHERE date BETWEEN ? AND ? AND status != ?");
+    $stmt->bind_param("sss", $from, $to, $excluded);
+} else {
+    $stmt = $conn->prepare("SELECT name, day, date, time, location, involvement, person_in_charge, unit, status FROM events WHERE date BETWEEN ? AND ?");
+    $stmt->bind_param("ss", $from, $to);
 }
 
-$stmt->bind_param("ss", $startDate, $endDate);
+
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Set headers to output Excel
-header("Content-Type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=event_report.xls");
-header("Pragma: no-cache");
-header("Expires: 0");
+// Create a new spreadsheet
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
 
-// Output table header
-echo "<table border='1'>";
-echo "<tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Event Date</th>
-      </tr>";
-
-// Check if any data was returned
-if ($result->num_rows === 0) {
-    echo "<tr><td colspan='4'>No data found for selected date range.</td></tr>";
-} else {
-    // Output table rows
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>" . htmlspecialchars($row['id']) . "</td>
-                <td>" . htmlspecialchars($row['title']) . "</td>
-                <td>" . htmlspecialchars($row['description']) . "</td>
-                <td>" . htmlspecialchars($row['event_date']) . "</td>
-              </tr>";
-    }
+// Set header row
+$headers = ['Event Name', 'Day', 'Date', 'Time', 'Location', 'Involvement', 'Person In Charge', 'Unit', 'Status'];
+$col = 'A';
+foreach ($headers as $header) {
+    $sheet->setCellValue($col . '1', $header);
+    $col++;
 }
-echo "</table>";
 
-// Cleanup
-$stmt->close();
-$conn->close();
+// Fill in event data
+$row = 2;
+while ($event = $result->fetch_assoc()) {
+    $sheet->setCellValue("A$row", $event['name']);
+    $sheet->setCellValue("B$row", $event['day']);
+    $sheet->setCellValue("C$row", $event['date']);
+    $sheet->setCellValue("D$row", $event['time']);
+    $sheet->setCellValue("E$row", $event['location']);
+    $sheet->setCellValue("F$row", $event['involvement']);
+    $sheet->setCellValue("G$row", $event['person_in_charge']);
+    $sheet->setCellValue("H$row", $event['unit']);
+    $sheet->setCellValue("I$row", $event['status']);
+    $row++;
+}
+
+// Set filename
+$filename = "event_report_" . str_replace('-', '', $from) . "_to_" . str_replace('-', '', $to) . ".xlsx";
+
+// Clear output buffer if needed
+if (ob_get_length()) {
+    ob_end_clean();
+}
+
+// Send file to browser for download
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header("Content-Disposition: attachment; filename=\"$filename\"");
+header('Cache-Control: max-age=0');
+
+$writer = new Xlsx($spreadsheet);
+$writer->save('php://output');
+exit;
+
 ?>
