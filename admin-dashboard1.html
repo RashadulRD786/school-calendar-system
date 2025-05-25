@@ -60,9 +60,9 @@
             <a href="admin-dashboard1.html" class="nav-button dashboard-btn active"
             >Dashboard</a
           >
-          <a href="events.html" class="nav-button events-btn">Events</a>
-          <a href="reports.html" class="nav-button reports-btn">Reports</a>
-          <a href="user-management/user-management.html" class="nav-button users-btn">Users</a>
+          
+          <a href="report.html" class="nav-button reports-btn">Reports</a>
+          <a href="user-management/user-management.php" class="nav-button users-btn">Users</a>
         </div>
         <a href="index.html" class="logout-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -195,6 +195,120 @@
           </div>
 
 
+ <!--View event modal-->
+  <div class="modal view-event-modal" id="view-event-modal" hidden>     
+            <button class="close-modal-button" id="view-close-button">&times;</button>
+            <h2 class="modal-title">Event Details</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="view-name" class="form-label">Event Name</label>
+                    <input type="text" id="view-name" class="form-input" readonly>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="view-date" class="form-label">Day</label>
+                        <input type="text" id="view-day" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view-day" class="form-label">Date</label>
+                        <input type="date" id="view-date" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view-time" class="form-label">Time</label>
+                        <input type="text" id="view-time" class="form-input" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="view-location" class="form-label">Location</label>
+                    <input type="text" id="view-location" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-involvement" class="form-label">Involvement</label>
+                    <input type="text" id="view-involvement" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-person" class="form-label">Person in Charge</label>
+                    <input type="text" id="view-person" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-unit" class="form-label">Unit</label>
+                    <input type="text" id="view-unit" class="form-input" readonly>
+                </div>
+                <div class="form-actions">
+                    <button class="confirm-button" id="view-edit-button">Edit</button>
+                    <button class="cancel-button" id="view-delete-button">Delete</button>
+                </div>
+            </div>
+    </div>
+
+<!--Edit event modal-->
+<div class="modal edit-event-modal" id="edit-event-modal" hidden>       
+            <button class="close-modal-button" id="edit-close-button">&times;</button>
+            <h2 class="modal-title">Edit Event Details</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="edit-name" class="form-label">Event Name</label>
+                    <input type="text" id="edit-name" class="form-input" required>
+                    <span class="error-message" id="error-edit-name"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-date" class="form-label">Day</label>
+                        <input type="text" id="edit-day" class="form-input" required>
+                        <span class="error-message" id="error-edit-date"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-day" class="form-label">Date</label>
+                        <input type="date" id="edit-date" class="form-input">
+                        <span class="error-message" id="error-edit-date"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-time" class="form-label">Time</label>
+                        <input type="time" id="edit-time" class="form-input" required>
+                        <span class="error-message" id="error-edit-time"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-location" class="form-label">Location</label>
+                    <input type="text" id="edit-location" class="form-input" required>
+                    <span class="error-message" id="error-edit-location"></span>
+                </div>
+                <div class="form-group">
+                    <label for="edit-involvement" class="form-label">Involvement</label>
+                    <input type="text" id="edit-involvement" class="form-input" required>
+                    <span class="error-message" id="error-edit-involvement"></span>
+                </div>
+                <div class="form-group">
+                    <label for="edit-person" class="form-label">Person in Charge</label>
+                    <input type="text" id="edit-person" class="form-input" required>
+                    <span class="error-message" id="error-edit-person"></span>
+                </div>
+                <div class="form-group">
+                    <label for="edit-unit" class="form-label">Unit</label>
+                    <input type="text" id="edit-unit" class="form-input" required>
+                    <span class="error-message" id="error-edit-unit"></span>
+                </div>
+                <div class="form-actions">
+                    <button class="confirm-button" id="edit-confirm-button">Save Changes</button>
+                    <button class="cancel-button" id="edit-cancel-button">Cancel</button>
+                </div>
+            </div>
+    </div>
+
+<!--Delete confirmation modal-->
+ <div class="modal delete-confirmation-modal" id="delete-confirmation-modal" hidden>
+       <div class="modal-content">
+            <button class="close-modal-button" id="delete-close-button">&times;</button>
+            <h2 class="modal-title">Confirm Deletion</h2>
+            <p>Are you sure you want to delete this event?</p><br>
+            <div class="modal-actions">
+                <button class="modal-btn confirm" id="delete-confirm-button">Delete</button>
+                <button class="modal-btn cancel" id="delete-cancel-button">Cancel</button>
+            </div>
+       </div>
+    </div>
+
+
 
           <div class="content-wrapper">
             <div class="calendar-section">
@@ -260,43 +374,15 @@
                   <!-- Events will be displayed here -->
                 </div>
               </div>
-              <div class="event-panel-actions">
-                <button
-                  class="event-edit-button"
-                  id="event-edit-button"
-                  disabled
-                >
-                  Edit
-                </button>
-                <button
-                  class="event-delete-button"
-                  id="event-delete-button"
-                  disabled
-                >
-                  Delete
-                </button>
-              </div>
+              
             </div>
           </div>
         </main>
       </div>
     </div>
 
- 
 
+<script src="admin script.js"></script>
 
-    <script src="admin script.js"></script>
-    <!-- Delete Confirmation Modal -->
-<div id="delete-modal" class="modal hidden">
-  <div class="modal-content">
-    <button class="modal-close" id="delete-modal-close">×</button>
-    <h3 class="modal-title">Are you sure you want to cancel the event?</h3><br><br>
-    <div class="modal-actions">
-      <button id="confirm-delete" class="modal-btn confirm">Confirm</button>
-      <button id="cancel-delete" class="modal-btn cancel">Cancel</button>
-    </div>
-  </div>
-</div>
   </body>
 </html>
-
