@@ -4,7 +4,7 @@ $user = 'root';
 $pass = ''; // default for XAMPP
 $dbname = 'school_system';
 
-$conn = new mysqli($host, $user, $pass, $dbname,3307);
+$conn = new mysqli($host, $user, $pass, $dbname,3306);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

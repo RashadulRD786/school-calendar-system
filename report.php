@@ -1,25 +1,21 @@
 <?php
-require 'vendor/autoload.php'; // PhpSpreadsheet autoloader
+require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-// Database connection
+// DB connection
 $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-<<<<<<< HEAD
-$conn = new mysqli($host, $user, $pass, $db,3307);
-=======
-$conn = new mysqli($host, $user, $pass, $db);
->>>>>>> 5ddfb305a158c9574ee477c7d14a6ed5ea099c2c
+$conn = new mysqli($host, $user, $pass, $db, 3306); // Change to 3306 or remove port if not needed
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get date range and status from the form
+// Input
 $from = $_POST['from'] ?? '';
 $to = $_POST['to'] ?? '';
 $status = $_POST['status'] ?? 'any';
@@ -28,7 +24,7 @@ if (!$from || !$to) {
     die("Please provide both 'from' and 'to' dates.");
 }
 
-// Query events based on date and status
+// Query
 if ($status === 'Complete') {
     $stmt = $conn->prepare("SELECT name, day, date, time, location, involvement, person_in_charge, unit, status FROM events WHERE date BETWEEN ? AND ? AND status = ?");
     $stmt->bind_param("sss", $from, $to, $status);
@@ -41,15 +37,13 @@ if ($status === 'Complete') {
     $stmt->bind_param("ss", $from, $to);
 }
 
-
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Create a new spreadsheet
+// Spreadsheet
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-// Set header row
 $headers = ['Event Name', 'Day', 'Date', 'Time', 'Location', 'Involvement', 'Person In Charge', 'Unit', 'Status'];
 $col = 'A';
 foreach ($headers as $header) {
@@ -57,7 +51,6 @@ foreach ($headers as $header) {
     $col++;
 }
 
-// Fill in event data
 $row = 2;
 while ($event = $result->fetch_assoc()) {
     $sheet->setCellValue("A$row", $event['name']);
@@ -72,15 +65,13 @@ while ($event = $result->fetch_assoc()) {
     $row++;
 }
 
-// Set filename
-$filename = "event_report_" . str_replace('-', '', $from) . "_to_" . str_replace('-', '', $to) . ".xlsx";
+// Output
+$filename = "event_report_" . preg_replace('/[^0-9]/', '', $from) . "_to_" . preg_replace('/[^0-9]/', '', $to) . ".xlsx";
 
-// Clear output buffer if needed
 if (ob_get_length()) {
     ob_end_clean();
 }
 
-// Send file to browser for download
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header("Content-Disposition: attachment; filename=\"$filename\"");
 header('Cache-Control: max-age=0');
@@ -88,9 +79,3 @@ header('Cache-Control: max-age=0');
 $writer = new Xlsx($spreadsheet);
 $writer->save('php://output');
 exit;
-
-<<<<<<< HEAD
-?>
-=======
-?>
->>>>>>> 5ddfb305a158c9574ee477c7d14a6ed5ea099c2c
