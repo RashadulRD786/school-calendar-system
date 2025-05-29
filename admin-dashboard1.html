@@ -176,15 +176,23 @@
 
               </div>
               <div>
-                <label class="form-label">Unit</label>
-                <input
-                  class="form-input"
-                  type="text"
-                  data-el="input-15"
-                  data-dom-state="input-16"
-                />
-                <span id="error-unit" class="error-message"></span>
-              </div>
+              <label class="form-label">Unit</label>
+              <select
+              class="form-input"
+              data-el="input-15"
+              data-dom-state="input-16"
+              id="unit-select"
+  >
+            <option value="">-- Select Unit --</option>
+            <option value="PENGURUSAN">PENGURUSAN</option>
+            <option value="KURIKULUM">KURIKULUM</option>
+            <option value="HAL EHWAL MURID">HAL EHWAL MURID</option>
+            <option value="KOKURIKULUM">KOKURIKULUM</option>
+            <option value="PENDIDIKAN KHAS">PENDIDIKAN KHAS</option>
+            <option value="PRA SEKOLAH">PRA SEKOLAH</option>
+            </select>
+            <span id="error-unit" class="error-message"></span>
+            </div>
               <div class="form-actions">
                 <button class="confirm-button" id="event-confirm-button"  data-el="button-4">
                   Confirm
