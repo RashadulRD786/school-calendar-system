@@ -183,7 +183,7 @@
               data-dom-state="input-16"
               id="unit-select"
   >
-            <option value="">-- Select Unit --</option>
+            <option value="" disabled selected hidden>-- Select Unit --</option>
             <option value="PENGURUSAN">PENGURUSAN</option>
             <option value="KURIKULUM">KURIKULUM</option>
             <option value="HAL EHWAL MURID">HAL EHWAL MURID</option>
@@ -192,6 +192,21 @@
             <option value="PRA SEKOLAH">PRA SEKOLAH</option>
             </select>
             <span id="error-unit" class="error-message"></span>
+            </div>
+            <div>
+            <label class="form-label">Status</label>
+            <select
+              class="form-input"
+              data-el="input-17"
+              data-dom-state="input-18"
+              id="status-unit"
+              required
+            >
+              <option value="" disabled selected hidden>-- Select Status --</option>
+              <option value="COMPLETE">COMPLETE</option>
+              <option value="NOT-COMPLETE">NOT-COMPLETE</option>
+            </select>
+            <span id="error-status" class="error-message"></span>
             </div>
               <div class="form-actions">
                 <button class="confirm-button" id="event-confirm-button"  data-el="button-4">
@@ -242,10 +257,15 @@
                     <label for="view-unit" class="form-label">Unit</label>
                     <input type="text" id="view-unit" class="form-input" readonly>
                 </div>
+                <div class="form-group">
+                    <label for="view-status" class="form-label">Status</label>
+                    <input type="text" id="view-status" class="form-input" readonly>
+                </div>
                 <div class="form-actions">
                     <button class="confirm-button" id="view-edit-button">Edit</button>
                     <button class="cancel-button" id="view-delete-button">Delete</button>
                 </div>
+                
             </div>
     </div>
 
@@ -260,21 +280,21 @@
                     <span class="error-message" id="error-edit-name"></span>
                 </div>
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="edit-date" class="form-label">Day</label>
-                        <input type="text" id="edit-day" class="form-input" required>
-                        <span class="error-message" id="error-edit-date"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-day" class="form-label">Date</label>
-                        <input type="date" id="edit-date" class="form-input">
-                        <span class="error-message" id="error-edit-date"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-time" class="form-label">Time</label>
-                        <input type="time" id="edit-time" class="form-input" required>
-                        <span class="error-message" id="error-edit-time"></span>
-                    </div>
+                  <div class="form-group">
+                    <label for="edit-day" class="form-label">Day</label>
+                    <input type="text" id="edit-day" class="form-input" required>
+                    <span class="error-message" id="error-edit-day"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-date" class="form-label">Date</label>
+                    <input type="date" id="edit-date" class="form-input">
+                    <span class="error-message" id="error-edit-date"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-time" class="form-label">Time</label>
+                    <input type="time" id="edit-time" class="form-input" required>
+                    <span class="error-message" id="error-edit-time"></span>
+                  </div>
                 </div>
                 <div class="form-group">
                     <label for="edit-location" class="form-label">Location</label>
@@ -293,8 +313,24 @@
                 </div>
                 <div class="form-group">
                     <label for="edit-unit" class="form-label">Unit</label>
-                    <input type="text" id="edit-unit" class="form-input" required>
-                    <span class="error-message" id="error-edit-unit"></span>
+                    <select id="edit-unit" class="form-input" required>
+      <option value="" disabled selected hidden>-- Select Unit --</option>
+      <option value="PENGURUSAN">PENGURUSAN</option>
+      <option value="KURIKULUM">KURIKULUM</option>
+      <option value="HAL EHWAL MURID">HAL EHWAL MURID</option>
+      <option value="KOKURIKULUM">KOKURIKULUM</option>
+      <option value="PENDIDIKAN KHAS">PENDIDIKAN KHAS</option>
+      <option value="PRA SEKOLAH">PRA SEKOLAH</option>
+    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-status" class="form-label">Status</label>
+                    <select id="edit-status" class="form-input" required>
+      <option value="" disabled selected hidden>-- Select Status --</option>
+      <option value="COMPLETE">COMPLETE</option>
+      <option value="NOT-COMPLETE">NOT-COMPLETE</option>
+    </select>             
                 </div>
                 <div class="form-actions">
                     <button class="confirm-button" id="edit-confirm-button">Save Changes</button>

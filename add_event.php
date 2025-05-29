@@ -22,10 +22,11 @@ $location = $_POST['location'];
 $involvement = $_POST['involvement'];
 $person_in_charge = $_POST['person_in_charge'];
 $unit = $_POST['unit'];
+$status = $_POST['status'];
 
 // Insert into DB
-$stmt = $conn->prepare("INSERT INTO events (name, day, date, time, location, involvement, person_in_charge, unit) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssssss", $name, $day, $date, $time, $location, $involvement, $person_in_charge, $unit);
+$stmt = $conn->prepare("INSERT INTO events (name, day, date, time, location, involvement, person_in_charge, unit, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("sssssssss", $name, $day, $date, $time, $location, $involvement, $person_in_charge, $unit, $status);
 
 if ($stmt->execute()) {
     echo "✅ Event added successfully.";
@@ -38,7 +39,8 @@ if ($stmt->execute()) {
         'date' => $date,
         'time' => $time,
         'location' => $location,
-        'person_in_charge' => $person_in_charge
+        'person_in_charge' => $person_in_charge,
+        'status' => $status // Optional: include status in notification
     ];
 
     sendEventNotification($eventData);
