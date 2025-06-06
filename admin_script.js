@@ -1056,7 +1056,22 @@ function onEventClick(event) {
 // EVENT: Edit -> populate edit modal
 function handleEditClick() {
   if (!state.selectedEvent) return;
-  populateEditModal(state.selectedEvent);
+
+  // Defensive: fetch fresh copy from state
+  const selectedId = state.selectedEvent.id;
+  const event = state.events.find(e => e.id === selectedId);
+  if (!event) {
+    alert("Event not found.");
+    return;
+  }
+
+  // Set selected event explicitly again
+  state.selectedEvent = event;
+
+  // Populate the edit modal
+  populateEditModal(event);
+
+  // Toggle modals
   toggleModal("view-event-modal", false);
   toggleModal("edit-event-modal", true);
 }
@@ -1069,6 +1084,11 @@ function handleEditCancel() {
 
 // EVENT: Confirm edit -> save and show view
 function handleEditConfirm() {
+  if (!state.selectedEvent) {
+    alert("No event is selected for editing.");
+    return;
+  }
+
   const updated = {
     id: state.selectedEvent.id,
     name: document.getElementById("edit-name").value.trim(),
@@ -1079,8 +1099,9 @@ function handleEditConfirm() {
     involvement: document.getElementById("edit-involvement").value.trim(),
     person_in_charge: document.getElementById("edit-person").value.trim(),
     unit: document.getElementById("edit-unit").value.trim(),
-    status: document.getElementById("edit-status").value.trim(), // <-- Add status
+    status: document.getElementById("edit-status").value.trim()
   };
+
 
   // ✅ Validation
   let isValid = true;
