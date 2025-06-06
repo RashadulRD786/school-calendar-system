@@ -337,18 +337,17 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     fields.forEach(({ key, inputEl, errorEl, label }) => {
-      const value = state.eventDetails[key];
-      const error = document.getElementById(errorEl);
       const input = document.querySelector(`[data-el='${inputEl}']`);
+      const value = input ? input.value : "";
+      const error = document.getElementById(errorEl);
 
-      if (!value) {
-        error.textContent = `${label} is required.`;
-        error.style.color = "red";
-        input.classList.add("input-error");
+      if (!value.trim()) {
+        if (error) error.textContent = `${label} is required.`;
+        if (input) input.classList.add("input-error");
         isValid = false;
       } else {
-        error.textContent = "";
-        input.classList.remove("input-error");
+        if (error) error.textContent = "";
+        if (input) input.classList.remove("input-error");
       }
     });
 
