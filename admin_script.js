@@ -669,12 +669,19 @@ function submitEventToServer(data) {
 
     if (!editButton || !deleteButton) return;
 
-    if (state.selectedEvent) {
+    if (state.selectedEvent && state.selectedEvent.id) {
       editButton.disabled = false;
       deleteButton.disabled = false;
     } else {
       editButton.disabled = true;
       deleteButton.disabled = true;
+    }
+  }
+
+  function updateModalActionButtons() {
+    const modalEditButton = document.getElementById("view-edit-button");
+    if (modalEditButton) {
+      modalEditButton.disabled = !(state.selectedEvent && state.selectedEvent.id);
     }
   }
 
@@ -965,7 +972,7 @@ function submitEventToServer(data) {
 
     if (editButton) {
       editButton.addEventListener("click", () => {
-        if (state.selectedEvent) {
+        if (state.selectedEvent && state.selectedEvent.id) {
 
     // Populate form with event details
     state.eventDetails = {
@@ -1022,7 +1029,7 @@ function populateViewModal(event) {
   document.getElementById("view-name").value = event.title;
   document.getElementById("view-date").value = event.date;
   document.getElementById("view-day").value = event.day;
-  const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
+   const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById("view-location").value = event.location;
   document.getElementById("view-involvement").value = event.involvement;
@@ -1055,7 +1062,10 @@ function onEventClick(event) {
 
 // EVENT: Edit -> populate edit modal
 function handleEditClick() {
-  if (!state.selectedEvent) return;
+  if (!state.selectedEvent || !state.selectedEvent.id) {
+    alert("No event selected for editing.");
+    return;
+  }
 
   // Defensive: fetch fresh copy from state
   const selectedId = state.selectedEvent.id;
@@ -1318,9 +1328,7 @@ function setupEditFormListeners() {
   });
 }
 
-
-
-
+console.log("Selected event:", state.selectedEvent);
 
 
 
