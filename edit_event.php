@@ -6,7 +6,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = ''; // Ensure this is your correct MySQL password
-$port = 3307; // Correct port
+$port = 3306; // Correct port
 
 $response = []; // Initialize an array to hold the response
 
@@ -20,8 +20,21 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Check if all required POST data is set
-if (isset($_POST['id'], $_POST['name'], $_POST['day'], $_POST['date'], $_POST['time'], $_POST['location'], $_POST['involvement'], $_POST['person_in_charge'], $_POST['unit'])) {
+// Check if all required POST data is set (add 'status')
+if (
+    isset(
+        $_POST['id'],
+        $_POST['name'],
+        $_POST['day'],
+        $_POST['date'],
+        $_POST['time'],
+        $_POST['location'],
+        $_POST['involvement'],
+        $_POST['person_in_charge'],
+        $_POST['unit'],
+        $_POST['status'] // <-- Add status
+    )
+) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $day = $_POST['day'];
@@ -31,11 +44,13 @@ if (isset($_POST['id'], $_POST['name'], $_POST['day'], $_POST['date'], $_POST['t
     $involvement = $_POST['involvement'];
     $person_in_charge = $_POST['person_in_charge'];
     $unit = $_POST['unit'];
+    $status = $_POST['status']; // <-- Add status
 
-    $stmt = $conn->prepare("UPDATE events SET name=?, day=?, date=?, time=?, location=?, involvement=?, person_in_charge=?, unit=? WHERE id=?");
+    // Update query now includes status
+    $stmt = $conn->prepare("UPDATE events SET name=?, day=?, date=?, time=?, location=?, involvement=?, person_in_charge=?, unit=?, status=? WHERE id=?");
     if ($stmt) {
-        // Correct binding: 8 strings (s) and 1 integer (i) for the id
-        $stmt->bind_param("ssssssssi", $name, $day, $date, $time, $location, $involvement, $person_in_charge, $unit, $id);
+        // 9 strings (s) and 1 integer (i) for the id
+        $stmt->bind_param("sssssssssi", $name, $day, $date, $time, $location, $involvement, $person_in_charge, $unit, $status, $id);
 
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {

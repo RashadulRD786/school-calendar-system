@@ -10,7 +10,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$conn = new mysqli($host, $user, $pass, $db,3307);
+$conn = new mysqli($host, $user, $pass, $db,3306);
 if ($conn->connect_error) die("DB error: " . $conn->connect_error);
 
 $email = $_POST['email'];

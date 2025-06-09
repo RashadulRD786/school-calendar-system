@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       involvement: "",
       personInCharge: "",
       unit: "",
+      status: "", // <-- Add status to eventDetails
     },
     events: [],
   };
@@ -38,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
           involvement: event.involvement,
           personInCharge: event.person_in_charge,
           unit: event.unit,
+          status: event.status, // <-- Add status here
           description: event.name,
         }));
-  
         renderCalendarDays();
         updateEventDetailsPanel();
       })
@@ -140,6 +141,12 @@ document.addEventListener("DOMContentLoaded", () => {
       el.value = state.eventDetails.unit;
       el.removeEventListener("input", onInput15Input);
       el.addEventListener("input", onInput15Input);
+    });
+
+    document.querySelectorAll("[data-el='input-17']").forEach((el) => {
+      el.value = state.eventDetails.status;
+      el.removeEventListener("input", onInput17Input);
+      el.addEventListener("input", onInput17Input);
     });
 
     // Form action buttons
@@ -310,9 +317,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
   }
 
+  function onInput17Input(event) {
+    state.eventDetails.status = event.target.value;
+  }
+
   function validateFormWithErrors() {
     let isValid = true;
-  
+
     const fields = [
       { key: 'name', inputEl: 'input-1', errorEl: 'error-name', label: 'Event Name' },
       { key: 'day', inputEl: 'input-3', errorEl: 'error-day', label: 'Day' },
@@ -321,25 +332,25 @@ document.addEventListener("DOMContentLoaded", () => {
       { key: 'location', inputEl: 'input-9', errorEl: 'error-location', label: 'Location' },
       { key: 'involvement', inputEl: 'input-11', errorEl: 'error-involvement', label: 'Involvement' },
       { key: 'personInCharge', inputEl: 'input-13', errorEl: 'error-person', label: 'Person in Charge' },
-      { key: 'unit', inputEl: 'input-15', errorEl: 'error-unit', label: 'Unit' }
+      { key: 'unit', inputEl: 'input-15', errorEl: 'error-unit', label: 'Unit' },
+      { key: 'status', inputEl: 'input-17', errorEl: 'error-status', label: 'Status' }, // <-- Add status validation
     ];
-  
+
     fields.forEach(({ key, inputEl, errorEl, label }) => {
-      const value = state.eventDetails[key];
-      const error = document.getElementById(errorEl);
       const input = document.querySelector(`[data-el='${inputEl}']`);
-  
-      if (!value) {
-        error.textContent = `${label} is required.`;
-        error.style.color = "red";
-        input.classList.add("input-error");
+      const value = input ? input.value : "";
+      const error = document.getElementById(errorEl);
+
+      if (!value.trim()) {
+        if (error) error.textContent = `${label} is required.`;
+        if (input) input.classList.add("input-error");
         isValid = false;
       } else {
-        error.textContent = "";
-        input.classList.remove("input-error");
+        if (error) error.textContent = "";
+        if (input) input.classList.remove("input-error");
       }
     });
-  
+
     return isValid;
   }
   
@@ -356,7 +367,8 @@ document.addEventListener("DOMContentLoaded", () => {
       location: state.eventDetails.location,
       involvement: state.eventDetails.involvement,
       person_in_charge: state.eventDetails.personInCharge,
-      unit: state.eventDetails.unit
+      unit: state.eventDetails.unit,
+      status: state.eventDetails.status // <-- Add status here
     };
   
     if (state.isEditingEvent && state.selectedEvent) {
@@ -376,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
           involvement: updatedEvent.involvement,
           personInCharge: updatedEvent.person_in_charge,
           unit: updatedEvent.unit,
+          status: updatedEvent.status, // <-- Add status here
           description: updatedEvent.name,
         };
   
@@ -412,6 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
         involvement: updatedEvent.involvement,
         personInCharge: updatedEvent.person_in_charge,
         unit: updatedEvent.unit,
+        status: updatedEvent.status, // <-- Add status here
         description: updatedEvent.name,
       };
   
@@ -479,16 +493,17 @@ function submitEventToServer(data) {
       involvement: "",
       personInCharge: "",
       unit: "",
+      status: "", // <-- Add status here
     };
   
     const fields = [
       'input-1', 'input-3', 'input-5', 'input-7', 
-      'input-9', 'input-11', 'input-13', 'input-15'
+      'input-9', 'input-11', 'input-13', 'input-15', 'input-17' // <-- Add input-17
     ];
   
     const errorSpans = [
       'error-name', 'error-day', 'error-date', 'error-time',
-      'error-location', 'error-involvement', 'error-person', 'error-unit'
+      'error-location', 'error-involvement', 'error-person', 'error-unit', 'error-status' // <-- Add error-status
     ];
   
     fields.forEach((inputEl) => {
@@ -653,12 +668,19 @@ function submitEventToServer(data) {
 
     if (!editButton || !deleteButton) return;
 
-    if (state.selectedEvent) {
+    if (state.selectedEvent && state.selectedEvent.id) {
       editButton.disabled = false;
       deleteButton.disabled = false;
     } else {
       editButton.disabled = true;
       deleteButton.disabled = true;
+    }
+  }
+
+  function updateModalActionButtons() {
+    const modalEditButton = document.getElementById("view-edit-button");
+    if (modalEditButton) {
+      modalEditButton.disabled = !(state.selectedEvent && state.selectedEvent.id);
     }
   }
 
@@ -839,6 +861,7 @@ function submitEventToServer(data) {
           <div class="event-line"><strong>Involvement:</strong> ${event.involvement || "N/A"}</div><br>
           <div class="event-line"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div><br>
           <div class="event-line"><strong>Unit:</strong> ${event.unit || "N/A"}</div><br>
+          <div class="event-line"><strong>Status:</strong> ${event.status || "N/A"}</div><br>
         `;
         
           // Add click event to select this event
@@ -948,23 +971,28 @@ function submitEventToServer(data) {
 
     if (editButton) {
       editButton.addEventListener("click", () => {
-        if (state.selectedEvent) {
-          // Populate form with event details
-          state.eventDetails = {
-            name: state.selectedEvent.title,
-            date: state.selectedEvent.date,
-            time: state.selectedEvent.startTime,
-            day: state.selectedEvent.day || "",
-            location: state.selectedEvent.location || "",
-            involvement: state.selectedEvent.involvement || "",
-            personInCharge: state.selectedEvent.personInCharge || "",
-            unit: state.selectedEvent.unit || "",
-          };
+        if (state.selectedEvent && state.selectedEvent.id) {
 
-          state.isEditingEvent = true;
-          state.showEventForm = true;
-          update();
-        }
+    // Populate form with event details
+    state.eventDetails = {
+    name: state.selectedEvent.title,
+    date: state.selectedEvent.date,
+    time: state.selectedEvent.startTime,
+    day: state.selectedEvent.day || "",
+    location: state.selectedEvent.location || "",
+    involvement: state.selectedEvent.involvement || "",
+    personInCharge: state.selectedEvent.personInCharge || "",
+    unit: state.selectedEvent.unit || "",
+    status: state.selectedEvent.status || "", // <-- Add status
+  };
+
+  state.isEditingEvent = true;
+  state.showEventForm = true;
+  update();
+
+  // ✅ Fix: Set up listeners to track live edits
+  setupEditFormListeners();
+}
       });
     }
 
@@ -1000,12 +1028,13 @@ function populateViewModal(event) {
   document.getElementById("view-name").value = event.title;
   document.getElementById("view-date").value = event.date;
   document.getElementById("view-day").value = event.day;
-  const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
+   const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById("view-location").value = event.location;
   document.getElementById("view-involvement").value = event.involvement;
   document.getElementById("view-person").value = event.personInCharge;
   document.getElementById("view-unit").value = event.unit;
+  document.getElementById("view-status").value = event.status; // <-- Add this line
 }
 
 // UTIL: Populate edit modal with event data
@@ -1020,6 +1049,7 @@ function populateEditModal(event) {
   document.getElementById("edit-involvement").value = event.involvement;
   document.getElementById("edit-person").value = event.personInCharge;
   document.getElementById("edit-unit").value = event.unit;
+  document.getElementById("edit-status").value = event.status; // <-- Add this line
 }
 
 // EVENT: When user clicks a calendar event label
@@ -1031,8 +1061,26 @@ function onEventClick(event) {
 
 // EVENT: Edit -> populate edit modal
 function handleEditClick() {
-  if (!state.selectedEvent) return;
-  populateEditModal(state.selectedEvent);
+  if (!state.selectedEvent || !state.selectedEvent.id) {
+    alert("No event selected for editing.");
+    return;
+  }
+
+  // Defensive: fetch fresh copy from state
+  const selectedId = state.selectedEvent.id;
+  const event = state.events.find(e => e.id === selectedId);
+  if (!event) {
+    alert("Event not found.");
+    return;
+  }
+
+  // Set selected event explicitly again
+  state.selectedEvent = event;
+
+  // Populate the edit modal
+  populateEditModal(event);
+
+  // Toggle modals
   toggleModal("view-event-modal", false);
   toggleModal("edit-event-modal", true);
 }
@@ -1045,6 +1093,11 @@ function handleEditCancel() {
 
 // EVENT: Confirm edit -> save and show view
 function handleEditConfirm() {
+  if (!state.selectedEvent) {
+    alert("No event is selected for editing.");
+    return;
+  }
+
   const updated = {
     id: state.selectedEvent.id,
     name: document.getElementById("edit-name").value.trim(),
@@ -1055,7 +1108,9 @@ function handleEditConfirm() {
     involvement: document.getElementById("edit-involvement").value.trim(),
     person_in_charge: document.getElementById("edit-person").value.trim(),
     unit: document.getElementById("edit-unit").value.trim(),
+    status: document.getElementById("edit-status").value.trim()
   };
+
 
   // ✅ Validation
   let isValid = true;
@@ -1067,21 +1122,23 @@ function handleEditConfirm() {
     { id: "edit-location", label: "Location" },
     { id: "edit-involvement", label: "Involvement" },
     { id: "edit-person", label: "Person in Charge" },
-    { id: "edit-unit", label: "Unit" }
+    { id: "edit-unit", label: "Unit" },
+    { id: "edit-status", label: "Status" } // <-- Corrected
   ];
 
   fields.forEach(field => {
-    const input = document.getElementById(field.id);
-    const error = document.getElementById(`error-${field.id}`);
-    if (!input.value.trim()) {
-      input.classList.add("input-error");
-      if (error) error.textContent = `${field.label} is required`;
-      isValid = false;
-    } else {
-      input.classList.remove("input-error");
-      if (error) error.textContent = "";
-    }
-  });
+  const input = document.getElementById(field.id);
+  const error = document.getElementById(`error-${field.id}`);
+  const value = input ? input.value : "";
+  if (!value.trim()) {
+    if (input) input.classList.add("input-error");
+    if (error) error.textContent = `${field.label} is required`;
+    isValid = false;
+  } else {
+    if (input) input.classList.remove("input-error");
+    if (error) error.textContent = "";
+  }
+});
 
   if (!isValid) return;
 
@@ -1107,7 +1164,8 @@ function handleEditConfirm() {
           location: updated.location,
           involvement: updated.involvement,
           personInCharge: updated.person_in_charge,
-          unit: updated.unit
+          unit: updated.unit,
+          status: updated.status, // <-- Add status here
         };
         state.events[idx] = updatedEvent;
         state.selectedEvent = updatedEvent;
@@ -1127,9 +1185,6 @@ function handleEditConfirm() {
       console.error("❌ Edit failed:", err);
     });
 }
-
-
-
 
 // EVENT: Delete -> open delete modal
 function handleDeleteClick() {
@@ -1168,7 +1223,6 @@ function handleDeleteConfirm() {
       console.error("❌ Delete failed:", err);
     });
 }
-
 
 // EVENT: Cancel deletion
 function handleDeleteCancel() {
@@ -1227,6 +1281,7 @@ function openViewEventModal(event) {
   document.getElementById('view-involvement').value = event.involvement;
   document.getElementById('view-person').value = event.personInCharge;
   document.getElementById('view-unit').value = event.unit;
+  document.getElementById('view-status').value = event.status; // <-- Add this line
 
   document.getElementById('view-event-modal').removeAttribute('hidden');
 
@@ -1249,9 +1304,30 @@ document.addEventListener("click", function (e) {
   }
 });
 
+function setupEditFormListeners() {
+  const fields = [
+    { id: "edit-name", key: "name" },
+    { id: "edit-day", key: "day" },
+    { id: "edit-date", key: "date" },
+    { id: "edit-time", key: "time" },
+    { id: "edit-location", key: "location" },
+    { id: "edit-involvement", key: "involvement" },
+    { id: "edit-person", key: "personInCharge" },
+    { id: "edit-unit", key: "unit" },
+    { id: "edit-status", key: "status" },
+  ];
 
+  fields.forEach(({ id, key }) => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener("input", (e) => {
+        state.eventDetails[key] = e.target.value;
+      });
+    }
+  });
+}
 
-
+console.log("Selected event:", state.selectedEvent);
 
 
 

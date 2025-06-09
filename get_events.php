@@ -6,7 +6,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$port = 3307; // Make sure this port is correct for your MySQL setup
+$port = 3306; // Make sure this port is correct for your MySQL setup
 
 $response = []; // Initialize an array to hold the response
 
@@ -19,7 +19,8 @@ if ($conn->connect_error) {
     exit; // Use exit instead of die after sending JSON
 }
 
-$stmt = $conn->prepare("SELECT id, name, day, date, time, location, involvement, person_in_charge, unit FROM events");
+// Add status to the SELECT statement
+$stmt = $conn->prepare("SELECT id, name, day, date, time, location, involvement, person_in_charge, unit, status FROM events");
 
 if (!$stmt) {
     $response['error'] = "Error preparing statement: " . $conn->error; // Use $conn->error for prepare errors
@@ -49,7 +50,8 @@ while ($row = $result->fetch_assoc()) {
         'location' => $row['location'],
         'involvement' => $row['involvement'],
         'person_in_charge' => $row['person_in_charge'],
-        'unit' => $row['unit']
+        'unit' => $row['unit'],
+        'status' => $row['status'] // <-- Add status here
     ];
 }
 

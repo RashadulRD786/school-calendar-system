@@ -3,7 +3,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$conn = new mysqli($host, $user, $pass, $db, 3307);
+$conn = new mysqli($host, $user, $pass, $db, 3306);
 
 $token = $_POST['token'] ?? $_GET['token'] ?? '';
 $email = $_POST['email'] ?? $_GET['email'] ?? '';
