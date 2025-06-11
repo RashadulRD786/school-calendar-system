@@ -799,3 +799,17 @@ body {
 #delete-confirmation-modal .modal-btn.cancel:hover {
   background-color: #d32f2f;
 }
+
+.tag {
+  display: inline-block;
+  background: #e0e7ff;
+  color: #3730a3;
+  border-radius: 12px;
+  padding: 2px 10px;
+  margin: 2px 2px 2px 0;
+  font-size: 0.95em;
+}
+.tag-na {
+  background: #f3f4f6;
+  color: #6b7280;
+}

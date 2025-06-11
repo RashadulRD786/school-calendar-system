@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentMonth: new Date().getMonth(),
     currentYear: new Date().getFullYear(),
     selectedDate: null,
-    
+    selectedEvent: null,
     showEventPanel: false,
     showEventForm: false,
     isEditingEvent: false,
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let nodesToDestroy = [];
   let pendingUpdate = false;
 
-  function fetchEventsFromDB(callback) {
+  function fetchEventsFromDB() {
     fetch("get_events.php")
       .then((res) => res.json())
       .then((data) => {
@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
         renderCalendarDays();
         updateEventDetailsPanel();
-        if (callback) callback();
       })
       .catch((err) => {
         console.error("❌ Failed to load events:", err);
@@ -357,11 +356,13 @@ document.addEventListener("DOMContentLoaded", () => {
   
 
   function onButton4Click(event) {
+    // Always update involvement from Select2 before validation/submission
+    const involvementSelect = document.getElementById("involvement-select");
+    if (involvementSelect) {
+      state.eventDetails.involvement = $('#involvement-select').val() ? $('#involvement-select').val().join(',') : '';
+    }
     // ✅ Validate inputs first
     if (!validateFormWithErrors()) return;
-
-    // Always get the latest involvement value from Select2
-    state.eventDetails.involvement = $('#involvement-select').val();
   
     const updatedEvent = {
       name: state.eventDetails.name,
@@ -862,7 +863,7 @@ function submitEventToServer(data) {
           <div class="event-line"><strong>Date:</strong> ${formatDateForDisplay(event.date)} (${event.day})</div><br>
           <div class="event-line"><strong>Time:</strong> ${formatTimeWithAMPM(event.startTime)}${event.endTime ? " - " + formatTimeWithAMPM(event.endTime) : ""}</div><br>
           <div class="event-line"><strong>Location:</strong> ${event.location || "N/A"}</div><br>
-          <div class="event-line"><strong>Involvement:</strong> ${event.involvement || "N/A"}</div><br>
+          <div class="event-line"><strong>Involvement:</strong> ${(event.involvement || '').split(',').filter(Boolean).join(', ') || "N/A"}</div><br>
           <div class="event-line"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div><br>
           <div class="event-line"><strong>Unit:</strong> ${event.unit || "N/A"}</div><br>
           <div class="event-line"><strong>Status:</strong> ${event.status || "N/A"}</div><br>
@@ -1035,10 +1036,17 @@ function populateViewModal(event) {
    const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById("view-location").value = event.location;
-  document.getElementById("view-involvement").value = event.involvement;
+  document.getElementById('view-involvement').value = (event.involvement || '').split(',').filter(Boolean).join(', ');
   document.getElementById("view-person").value = event.personInCharge;
   document.getElementById("view-unit").value = event.unit;
   document.getElementById("view-status").value = event.status; // <-- Add this line
+
+  // New lines for involvement
+  const involvementContainer = document.getElementById('view-involvement');
+  const involvementArr = (event.involvement || '').split(',').filter(Boolean);
+  involvementContainer.innerHTML = involvementArr.length
+    ? involvementArr.map(name => `<span class="tag">${name.trim()}</span>`).join(' ')
+    : '<span class="tag tag-na">N/A</span>';
 }
 
 // UTIL: Populate edit modal with event data
@@ -1050,7 +1058,8 @@ function populateEditModal(event) {
   document.getElementById("edit-day").value = dayName;
   document.getElementById("edit-time").value = event.time || event.startTime;
   document.getElementById("edit-location").value = event.location;
-  document.getElementById("edit-involvement").value = event.involvement;
+  // After setting the value:
+  $('#edit-involvement').val((event.involvement || '').split(',').filter(Boolean)).trigger('change');
   document.getElementById("edit-person").value = event.personInCharge;
   document.getElementById("edit-unit").value = event.unit;
   document.getElementById("edit-status").value = event.status; // <-- Add this line
@@ -1109,15 +1118,44 @@ function handleEditConfirm() {
     day: document.getElementById("edit-day").value,
     time: document.getElementById("edit-time").value.trim(),
     location: document.getElementById("edit-location").value.trim(),
-    involvement: $('#edit-involvement').val(),
+    involvement: $('#edit-involvement').val() ? $('#edit-involvement').val().join(',') : '',
     person_in_charge: document.getElementById("edit-person").value.trim(),
     unit: document.getElementById("edit-unit").value.trim(),
     status: document.getElementById("edit-status").value.trim()
   };
 
-  // Save the ID before refreshing events
-  const editedId = updated.id;
 
+  // ✅ Validation
+  let isValid = true;
+  const fields = [
+    { id: "edit-name", label: "Event Name" },
+    { id: "edit-date", label: "Date" },
+    { id: "edit-day", label: "Day" },
+    { id: "edit-time", label: "Time" },
+    { id: "edit-location", label: "Location" },
+    { id: "edit-involvement", label: "Involvement" },
+    { id: "edit-person", label: "Person in Charge" },
+    { id: "edit-unit", label: "Unit" },
+    { id: "edit-status", label: "Status" } // <-- Corrected
+  ];
+
+  fields.forEach(field => {
+  const input = document.getElementById(field.id);
+  const error = document.getElementById(`error-${field.id}`);
+  const value = input ? input.value : "";
+  if (!value.trim()) {
+    if (input) input.classList.add("input-error");
+    if (error) error.textContent = `${field.label} is required`;
+    isValid = false;
+  } else {
+    if (input) input.classList.remove("input-error");
+    if (error) error.textContent = "";
+  }
+});
+
+  if (!isValid) return;
+
+  // 🔄 Backend update
   fetch("edit_event.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -1127,17 +1165,34 @@ function handleEditConfirm() {
     .then(resText => {
       console.log("✅ Edit response:", resText);
 
-      // After fetching events, re-select the edited event and update UI
-      fetchEventsFromDB(() => {
-        state.selectedEvent = state.events.find(e => e.id == editedId);
-        if (state.selectedEvent) {
-          populateEditModal(state.selectedEvent);
-          populateViewModal(state.selectedEvent);
-        }
-        updateEventDetailsPanel();
+      // 🔁 Update in state
+      const idx = state.events.findIndex(e => e.id === updated.id);
+      if (idx !== -1) {
+        const updatedEvent = {
+          ...state.events[idx],
+          title: updated.name,
+          date: updated.date,
+          startTime: updated.time,
+          day: updated.day,
+          location: updated.location,
+          involvement: updated.involvement,
+          personInCharge: updated.person_in_charge,
+          unit: updated.unit,
+          status: updated.status, // <-- Add status here
+        };
+        state.events[idx] = updatedEvent;
+        state.selectedEvent = updatedEvent;
+
+        // ✅ UI updates
         toggleModal("edit-event-modal", false);
+        openViewEventModal(updatedEvent);
         toggleModal("view-event-modal", true);
-      });
+        updateEventDetailsPanel();
+        renderCalendarDays();
+      }
+
+      // Optional: also refresh full DB if needed
+      fetchEventsFromDB();
     })
     .catch(err => {
       console.error("❌ Edit failed:", err);
@@ -1211,33 +1266,36 @@ function setupModalButtons() {
   document.getElementById("delete-cancel-button").onclick = handleDeleteCancel;
 }
 
-function populateTeacherDropdown(dropdownId, selectedValue = "") {
+function populateTeacherDropdown(dropdownId, selectedValues = []) {
   fetch("get_teachers.php")
     .then(res => res.json())
     .then(data => {
       const dropdown = document.getElementById(dropdownId);
       if (!dropdown) return;
 
-      // Remove all options except the first
-      dropdown.innerHTML = '<option value="">-- Select Teacher --</option>';
+      dropdown.innerHTML = '';
       data.forEach(teacher => {
         const option = document.createElement("option");
         option.value = teacher.full_name;
         option.textContent = teacher.full_name;
-        if (teacher.full_name === selectedValue) option.selected = true;
         dropdown.appendChild(option);
       });
 
-      // Initialize Select2
+      // Initialize Select2 for multiple selection
       if (window.$ && $(dropdown).select2) {
         if ($(dropdown).hasClass("select2-hidden-accessible")) {
           $(dropdown).select2("destroy");
         }
         $(dropdown).select2({
           width: '100%',
-          placeholder: "-- Select Teacher --",
-          allowClear: true
+          placeholder: "-- Select Teacher(s) --",
+          allowClear: true,
+          tags: false // Only allow selection from list
         });
+        // Set selected values if provided
+        if (selectedValues && selectedValues.length) {
+          $(dropdown).val(selectedValues).trigger('change');
+        }
       }
     })
     .catch(err => {
@@ -1265,16 +1323,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // When opening edit modal, set selected value
   document.getElementById("view-edit-button").addEventListener("click", () => {
+    // Convert comma-separated string to array for Select2
     const involvement = state.selectedEvent?.involvement || "";
-    populateTeacherDropdown("edit-involvement", involvement);
+    const involvementArr = involvement.split(',').filter(Boolean);
+    populateTeacherDropdown("edit-involvement", involvementArr);
   });
 
   // Update state when changed
   document.getElementById("involvement-select").addEventListener("change", function () {
-    state.eventDetails.involvement = this.value;
+    state.eventDetails.involvement = $('#involvement-select').val() ? $('#involvement-select').val().join(',') : '';
   });
   document.getElementById("edit-involvement").addEventListener("change", function () {
-    state.eventDetails.involvement = this.value;
+    const val = $('#edit-involvement').val();
+    state.eventDetails.involvement = val && val.length ? val.join(',') : '';
+    // Update the selectedEvent object fully to keep it in sync
+    if (state.selectedEvent) {
+      state.selectedEvent = {
+        ...state.selectedEvent,
+        involvement: state.eventDetails.involvement
+      };
+    }
   });
 });
 
@@ -1286,10 +1354,17 @@ function openViewEventModal(event) {
    const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById('view-location').value = event.location;
-  document.getElementById('view-involvement').value = event.involvement;
+  document.getElementById('view-involvement').value = (event.involvement || '').split(',').filter(Boolean).join(', ');
   document.getElementById('view-person').value = event.personInCharge;
   document.getElementById('view-unit').value = event.unit;
   document.getElementById('view-status').value = event.status; // <-- Add this line
+
+  // New lines for involvement
+  const involvementContainer = document.getElementById('view-involvement');
+  const involvementArr = (event.involvement || '').split(',').filter(Boolean);
+  involvementContainer.innerHTML = involvementArr.length
+    ? involvementArr.map(name => `<span class="tag">${name.trim()}</span>`).join(' ')
+    : '<span class="tag tag-na">N/A</span>';
 
   document.getElementById('view-event-modal').removeAttribute('hidden');
 
@@ -1301,15 +1376,15 @@ document.addEventListener("click", function (e) {
   const panel = document.getElementById("event-details-panel");
   const modal = document.getElementById("view-event-modal");
   const editModal = document.getElementById("edit-event-modal");
-  
-  const isInsidePanel = panel?.contains(e.target);
-  const isInsideModal = modal?.contains(e.target);
 
-  // 🟢 Fix: Check if click is inside any Select2 dropdown
-  const isInsideSelect2 = !!e.target.closest('.select2-container');
+  // Check if any modal is open
+  const isAnyModalOpen = !modal.hidden || !editModal.hidden;
 
-  // Only clear selection if click is outside panel, modal, editModal, and Select2
-  if (!isInsidePanel && !isInsideModal && !editModal?.contains(e.target) && !isInsideSelect2) {
+  // Check if click is inside any Select2 container or dropdown
+  const isInsideSelect2 = !!(e.target.closest('.select2-container') || e.target.closest('.select2-dropdown'));
+
+  // Only clear selection if click is outside panel, modal, editModal, and Select2, and no modal is open
+  if (!panel?.contains(e.target) && !modal?.contains(e.target) && !editModal?.contains(e.target) && !isInsideSelect2 && !isAnyModalOpen) {
     state.selectedEvent = null;
     updateEventDetailsPanel(); // Remove selected highlight
   }
@@ -1330,10 +1405,23 @@ function setupEditFormListeners() {
 
   fields.forEach(({ id, key }) => {
     const input = document.getElementById(id);
-    if (input) {
-      input.addEventListener("input", (e) => {
-        state.eventDetails[key] = e.target.value;
+    if (!input) return;
+
+    if (id === "edit-involvement") {
+      // Use Select2 change event for multi-select
+      $(input).off("change").on("change", function () {
+        state.eventDetails[key] = $(this).val() ? $(this).val().join(',') : '';
+        // Keep selectedEvent in sync
+        if (state.selectedEvent) {
+          state.selectedEvent[key] = state.eventDetails[key];
+        }
       });
+    } else {
+      input.removeEventListener("input", input._listener || (() => {}));
+      input._listener = function (e) {
+        state.eventDetails[key] = e.target.value;
+      };
+      input.addEventListener("input", input._listener);
     }
   });
 }
