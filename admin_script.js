@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentMonth: new Date().getMonth(),
     currentYear: new Date().getFullYear(),
     selectedDate: null,
-    selectedEvent: null,
+    
     showEventPanel: false,
     showEventForm: false,
     isEditingEvent: false,
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let nodesToDestroy = [];
   let pendingUpdate = false;
 
-  function fetchEventsFromDB() {
+  function fetchEventsFromDB(callback) {
     fetch("get_events.php")
       .then((res) => res.json())
       .then((data) => {
@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
         renderCalendarDays();
         updateEventDetailsPanel();
+        if (callback) callback();
       })
       .catch((err) => {
         console.error("❌ Failed to load events:", err);
@@ -358,6 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function onButton4Click(event) {
     // ✅ Validate inputs first
     if (!validateFormWithErrors()) return;
+
+    // Always get the latest involvement value from Select2
+    state.eventDetails.involvement = $('#involvement-select').val();
   
     const updatedEvent = {
       name: state.eventDetails.name,
@@ -1105,44 +1109,15 @@ function handleEditConfirm() {
     day: document.getElementById("edit-day").value,
     time: document.getElementById("edit-time").value.trim(),
     location: document.getElementById("edit-location").value.trim(),
-    involvement: document.getElementById("edit-involvement").value.trim(),
+    involvement: $('#edit-involvement').val(),
     person_in_charge: document.getElementById("edit-person").value.trim(),
     unit: document.getElementById("edit-unit").value.trim(),
     status: document.getElementById("edit-status").value.trim()
   };
 
+  // Save the ID before refreshing events
+  const editedId = updated.id;
 
-  // ✅ Validation
-  let isValid = true;
-  const fields = [
-    { id: "edit-name", label: "Event Name" },
-    { id: "edit-date", label: "Date" },
-    { id: "edit-day", label: "Day" },
-    { id: "edit-time", label: "Time" },
-    { id: "edit-location", label: "Location" },
-    { id: "edit-involvement", label: "Involvement" },
-    { id: "edit-person", label: "Person in Charge" },
-    { id: "edit-unit", label: "Unit" },
-    { id: "edit-status", label: "Status" } // <-- Corrected
-  ];
-
-  fields.forEach(field => {
-  const input = document.getElementById(field.id);
-  const error = document.getElementById(`error-${field.id}`);
-  const value = input ? input.value : "";
-  if (!value.trim()) {
-    if (input) input.classList.add("input-error");
-    if (error) error.textContent = `${field.label} is required`;
-    isValid = false;
-  } else {
-    if (input) input.classList.remove("input-error");
-    if (error) error.textContent = "";
-  }
-});
-
-  if (!isValid) return;
-
-  // 🔄 Backend update
   fetch("edit_event.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -1152,34 +1127,17 @@ function handleEditConfirm() {
     .then(resText => {
       console.log("✅ Edit response:", resText);
 
-      // 🔁 Update in state
-      const idx = state.events.findIndex(e => e.id === updated.id);
-      if (idx !== -1) {
-        const updatedEvent = {
-          ...state.events[idx],
-          title: updated.name,
-          date: updated.date,
-          startTime: updated.time,
-          day: updated.day,
-          location: updated.location,
-          involvement: updated.involvement,
-          personInCharge: updated.person_in_charge,
-          unit: updated.unit,
-          status: updated.status, // <-- Add status here
-        };
-        state.events[idx] = updatedEvent;
-        state.selectedEvent = updatedEvent;
-
-        // ✅ UI updates
-        toggleModal("edit-event-modal", false);
-        openViewEventModal(updatedEvent);
-        toggleModal("view-event-modal", true);
+      // After fetching events, re-select the edited event and update UI
+      fetchEventsFromDB(() => {
+        state.selectedEvent = state.events.find(e => e.id == editedId);
+        if (state.selectedEvent) {
+          populateEditModal(state.selectedEvent);
+          populateViewModal(state.selectedEvent);
+        }
         updateEventDetailsPanel();
-        renderCalendarDays();
-      }
-
-      // Optional: also refresh full DB if needed
-      fetchEventsFromDB();
+        toggleModal("edit-event-modal", false);
+        toggleModal("view-event-modal", true);
+      });
     })
     .catch(err => {
       console.error("❌ Edit failed:", err);
@@ -1253,9 +1211,45 @@ function setupModalButtons() {
   document.getElementById("delete-cancel-button").onclick = handleDeleteCancel;
 }
 
+function populateTeacherDropdown(dropdownId, selectedValue = "") {
+  fetch("get_teachers.php")
+    .then(res => res.json())
+    .then(data => {
+      const dropdown = document.getElementById(dropdownId);
+      if (!dropdown) return;
+
+      // Remove all options except the first
+      dropdown.innerHTML = '<option value="">-- Select Teacher --</option>';
+      data.forEach(teacher => {
+        const option = document.createElement("option");
+        option.value = teacher.full_name;
+        option.textContent = teacher.full_name;
+        if (teacher.full_name === selectedValue) option.selected = true;
+        dropdown.appendChild(option);
+      });
+
+      // Initialize Select2
+      if (window.$ && $(dropdown).select2) {
+        if ($(dropdown).hasClass("select2-hidden-accessible")) {
+          $(dropdown).select2("destroy");
+        }
+        $(dropdown).select2({
+          width: '100%',
+          placeholder: "-- Select Teacher --",
+          allowClear: true
+        });
+      }
+    })
+    .catch(err => {
+      console.error("Failed to load teachers:", err);
+    });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setupCloseButtons();
   setupModalButtons();
+  populateTeacherDropdown("involvement-select");
+  populateTeacherDropdown("edit-involvement");
 
   // ✅ Update edit-day when edit-date changes
   const editDateInput = document.getElementById("edit-date");
@@ -1268,6 +1262,20 @@ window.addEventListener("DOMContentLoaded", () => {
       editDayInput.value = dayName;
     });
   }
+
+  // When opening edit modal, set selected value
+  document.getElementById("view-edit-button").addEventListener("click", () => {
+    const involvement = state.selectedEvent?.involvement || "";
+    populateTeacherDropdown("edit-involvement", involvement);
+  });
+
+  // Update state when changed
+  document.getElementById("involvement-select").addEventListener("change", function () {
+    state.eventDetails.involvement = this.value;
+  });
+  document.getElementById("edit-involvement").addEventListener("change", function () {
+    state.eventDetails.involvement = this.value;
+  });
 });
 
 
@@ -1297,8 +1305,11 @@ document.addEventListener("click", function (e) {
   const isInsidePanel = panel?.contains(e.target);
   const isInsideModal = modal?.contains(e.target);
 
-  // Only clear selection if click is outside both panel and modal
-  if (!isInsidePanel && !isInsideModal && !editModal?.contains(e.target)) {
+  // 🟢 Fix: Check if click is inside any Select2 dropdown
+  const isInsideSelect2 = !!e.target.closest('.select2-container');
+
+  // Only clear selection if click is outside panel, modal, editModal, and Select2
+  if (!isInsidePanel && !isInsideModal && !editModal?.contains(e.target) && !isInsideSelect2) {
     state.selectedEvent = null;
     updateEventDetailsPanel(); // Remove selected highlight
   }
@@ -1326,6 +1337,7 @@ function setupEditFormListeners() {
     }
   });
 }
+
 
 console.log("Selected event:", state.selectedEvent);
 
