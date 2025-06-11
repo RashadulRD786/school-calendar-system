@@ -356,6 +356,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
 
   function onButton4Click(event) {
+    // Always update involvement from Select2 before validation/submission
+    const involvementSelect = document.getElementById("involvement-select");
+    if (involvementSelect) {
+      state.eventDetails.involvement = $('#involvement-select').val() ? $('#involvement-select').val().join(',') : '';
+    }
     // ✅ Validate inputs first
     if (!validateFormWithErrors()) return;
   
@@ -858,7 +863,7 @@ function submitEventToServer(data) {
           <div class="event-line"><strong>Date:</strong> ${formatDateForDisplay(event.date)} (${event.day})</div><br>
           <div class="event-line"><strong>Time:</strong> ${formatTimeWithAMPM(event.startTime)}${event.endTime ? " - " + formatTimeWithAMPM(event.endTime) : ""}</div><br>
           <div class="event-line"><strong>Location:</strong> ${event.location || "N/A"}</div><br>
-          <div class="event-line"><strong>Involvement:</strong> ${event.involvement || "N/A"}</div><br>
+          <div class="event-line"><strong>Involvement:</strong> ${(event.involvement || '').split(',').filter(Boolean).join(', ') || "N/A"}</div><br>
           <div class="event-line"><strong>Person in Charge:</strong> ${event.personInCharge || "N/A"}</div><br>
           <div class="event-line"><strong>Unit:</strong> ${event.unit || "N/A"}</div><br>
           <div class="event-line"><strong>Status:</strong> ${event.status || "N/A"}</div><br>
@@ -1031,10 +1036,17 @@ function populateViewModal(event) {
    const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById("view-location").value = event.location;
-  document.getElementById("view-involvement").value = event.involvement;
+  document.getElementById('view-involvement').value = (event.involvement || '').split(',').filter(Boolean).join(', ');
   document.getElementById("view-person").value = event.personInCharge;
   document.getElementById("view-unit").value = event.unit;
   document.getElementById("view-status").value = event.status; // <-- Add this line
+
+  // New lines for involvement
+  const involvementContainer = document.getElementById('view-involvement');
+  const involvementArr = (event.involvement || '').split(',').filter(Boolean);
+  involvementContainer.innerHTML = involvementArr.length
+    ? involvementArr.map(name => `<span class="tag">${name.trim()}</span>`).join(' ')
+    : '<span class="tag tag-na">N/A</span>';
 }
 
 // UTIL: Populate edit modal with event data
@@ -1046,7 +1058,8 @@ function populateEditModal(event) {
   document.getElementById("edit-day").value = dayName;
   document.getElementById("edit-time").value = event.time || event.startTime;
   document.getElementById("edit-location").value = event.location;
-  document.getElementById("edit-involvement").value = event.involvement;
+  // After setting the value:
+  $('#edit-involvement').val((event.involvement || '').split(',').filter(Boolean)).trigger('change');
   document.getElementById("edit-person").value = event.personInCharge;
   document.getElementById("edit-unit").value = event.unit;
   document.getElementById("edit-status").value = event.status; // <-- Add this line
@@ -1105,7 +1118,7 @@ function handleEditConfirm() {
     day: document.getElementById("edit-day").value,
     time: document.getElementById("edit-time").value.trim(),
     location: document.getElementById("edit-location").value.trim(),
-    involvement: document.getElementById("edit-involvement").value.trim(),
+    involvement: $('#edit-involvement').val() ? $('#edit-involvement').val().join(',') : '',
     person_in_charge: document.getElementById("edit-person").value.trim(),
     unit: document.getElementById("edit-unit").value.trim(),
     status: document.getElementById("edit-status").value.trim()
@@ -1253,9 +1266,48 @@ function setupModalButtons() {
   document.getElementById("delete-cancel-button").onclick = handleDeleteCancel;
 }
 
+function populateTeacherDropdown(dropdownId, selectedValues = []) {
+  fetch("get_teachers.php")
+    .then(res => res.json())
+    .then(data => {
+      const dropdown = document.getElementById(dropdownId);
+      if (!dropdown) return;
+
+      dropdown.innerHTML = '';
+      data.forEach(teacher => {
+        const option = document.createElement("option");
+        option.value = teacher.full_name;
+        option.textContent = teacher.full_name;
+        dropdown.appendChild(option);
+      });
+
+      // Initialize Select2 for multiple selection
+      if (window.$ && $(dropdown).select2) {
+        if ($(dropdown).hasClass("select2-hidden-accessible")) {
+          $(dropdown).select2("destroy");
+        }
+        $(dropdown).select2({
+          width: '100%',
+          placeholder: "-- Select Teacher(s) --",
+          allowClear: true,
+          tags: false // Only allow selection from list
+        });
+        // Set selected values if provided
+        if (selectedValues && selectedValues.length) {
+          $(dropdown).val(selectedValues).trigger('change');
+        }
+      }
+    })
+    .catch(err => {
+      console.error("Failed to load teachers:", err);
+    });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setupCloseButtons();
   setupModalButtons();
+  populateTeacherDropdown("involvement-select");
+  populateTeacherDropdown("edit-involvement");
 
   // ✅ Update edit-day when edit-date changes
   const editDateInput = document.getElementById("edit-date");
@@ -1268,6 +1320,30 @@ window.addEventListener("DOMContentLoaded", () => {
       editDayInput.value = dayName;
     });
   }
+
+  // When opening edit modal, set selected value
+  document.getElementById("view-edit-button").addEventListener("click", () => {
+    // Convert comma-separated string to array for Select2
+    const involvement = state.selectedEvent?.involvement || "";
+    const involvementArr = involvement.split(',').filter(Boolean);
+    populateTeacherDropdown("edit-involvement", involvementArr);
+  });
+
+  // Update state when changed
+  document.getElementById("involvement-select").addEventListener("change", function () {
+    state.eventDetails.involvement = $('#involvement-select').val() ? $('#involvement-select').val().join(',') : '';
+  });
+  document.getElementById("edit-involvement").addEventListener("change", function () {
+    const val = $('#edit-involvement').val();
+    state.eventDetails.involvement = val && val.length ? val.join(',') : '';
+    // Update the selectedEvent object fully to keep it in sync
+    if (state.selectedEvent) {
+      state.selectedEvent = {
+        ...state.selectedEvent,
+        involvement: state.eventDetails.involvement
+      };
+    }
+  });
 });
 
 
@@ -1278,10 +1354,17 @@ function openViewEventModal(event) {
    const formattedTime = formatTimeWithAMPM(event.time || event.startTime);
   document.getElementById("view-time").value = formattedTime;
   document.getElementById('view-location').value = event.location;
-  document.getElementById('view-involvement').value = event.involvement;
+  document.getElementById('view-involvement').value = (event.involvement || '').split(',').filter(Boolean).join(', ');
   document.getElementById('view-person').value = event.personInCharge;
   document.getElementById('view-unit').value = event.unit;
   document.getElementById('view-status').value = event.status; // <-- Add this line
+
+  // New lines for involvement
+  const involvementContainer = document.getElementById('view-involvement');
+  const involvementArr = (event.involvement || '').split(',').filter(Boolean);
+  involvementContainer.innerHTML = involvementArr.length
+    ? involvementArr.map(name => `<span class="tag">${name.trim()}</span>`).join(' ')
+    : '<span class="tag tag-na">N/A</span>';
 
   document.getElementById('view-event-modal').removeAttribute('hidden');
 
@@ -1293,12 +1376,15 @@ document.addEventListener("click", function (e) {
   const panel = document.getElementById("event-details-panel");
   const modal = document.getElementById("view-event-modal");
   const editModal = document.getElementById("edit-event-modal");
-  
-  const isInsidePanel = panel?.contains(e.target);
-  const isInsideModal = modal?.contains(e.target);
 
-  // Only clear selection if click is outside both panel and modal
-  if (!isInsidePanel && !isInsideModal && !editModal?.contains(e.target)) {
+  // Check if any modal is open
+  const isAnyModalOpen = !modal.hidden || !editModal.hidden;
+
+  // Check if click is inside any Select2 container or dropdown
+  const isInsideSelect2 = !!(e.target.closest('.select2-container') || e.target.closest('.select2-dropdown'));
+
+  // Only clear selection if click is outside panel, modal, editModal, and Select2, and no modal is open
+  if (!panel?.contains(e.target) && !modal?.contains(e.target) && !editModal?.contains(e.target) && !isInsideSelect2 && !isAnyModalOpen) {
     state.selectedEvent = null;
     updateEventDetailsPanel(); // Remove selected highlight
   }
@@ -1319,13 +1405,27 @@ function setupEditFormListeners() {
 
   fields.forEach(({ id, key }) => {
     const input = document.getElementById(id);
-    if (input) {
-      input.addEventListener("input", (e) => {
-        state.eventDetails[key] = e.target.value;
+    if (!input) return;
+
+    if (id === "edit-involvement") {
+      // Use Select2 change event for multi-select
+      $(input).off("change").on("change", function () {
+        state.eventDetails[key] = $(this).val() ? $(this).val().join(',') : '';
+        // Keep selectedEvent in sync
+        if (state.selectedEvent) {
+          state.selectedEvent[key] = state.eventDetails[key];
+        }
       });
+    } else {
+      input.removeEventListener("input", input._listener || (() => {}));
+      input._listener = function (e) {
+        state.eventDetails[key] = e.target.value;
+      };
+      input.addEventListener("input", input._listener);
     }
   });
 }
+
 
 console.log("Selected event:", state.selectedEvent);
 
