@@ -9,7 +9,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$conn = new mysqli($host, $user, $pass, $db, 3306); // Change to 3306 or remove port if not needed
+$conn = new mysqli($host, $user, $pass, $db, 3307); // Change to 3306 or remove port if not needed
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

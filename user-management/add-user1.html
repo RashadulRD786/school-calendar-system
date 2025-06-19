@@ -16,7 +16,7 @@
         <div class="header-left">
           <div class="logo-container">
             <img
-              src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg"
+              src="../SMKLOGO.png"
               alt="EventFlow Logo"
               class="logo-image"
             />
@@ -30,17 +30,17 @@
         <div class="notification-container">
           <button class="notification-button" data-el="button-1">
             <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
-              <rect width="53" height="57" fill="white"></rect>
+              <rect width="53" height="57" fill="none"></rect>
               <path
                 d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
-                stroke="#1E1E1E"
+                stroke="#FFFFFF"
                 stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               ></path>
               <path
                 d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
-                stroke="#1E1E1E"
+                stroke="#FFFFFF"
                 stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -62,7 +62,7 @@
           >
           
           <a href="../report.html" class="nav-button reports-btn">Reports</a>
-          <a href="user-management.php" class="nav-button users-btn active">Users</a>
+          <a href="user-management.php" class="nav-button users-btn active">Admin</a>
         </div>
         <a href="../index.html" class="logout-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -134,43 +134,109 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const cancelBtn = document.querySelector('.btn-cancel');
-      const form = document.getElementById('addUserForm');
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
-      const role = document.getElementById('role');
-      const requiredMessages = document.querySelectorAll('.required-message');
+    const cancelBtn = document.querySelector('.btn-cancel');
+    const form = document.getElementById('addUserForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const role = document.getElementById('role');
+    const requiredMessages = document.querySelectorAll('.required-message');
 
-      form.addEventListener('submit', (e) => {
+    // --- START: Notification JS Part Integration ---
+
+    // 1. Define the state object for notifications
+    // Combine with any other state you might have for add-user.html if needed
+    const state = {
+        notifications: false,
+        // ... any other state variables specific to your add-user page
+    };
+
+    // 2. Event handler for notification button click
+    function onButton1Click(event) {
+        state.notifications = !state.notifications;
+        updateNotificationVisibility(); // Call the specific update function
+    }
+
+    // 3. Event handler for notification dropdown click (to close it when clicked inside)
+    function onDiv1Click(event) {
+        event.stopPropagation(); // Prevents the click from bubbling up to document and closing it
+        state.notifications = false; // Set state to hide dropdown
+        updateNotificationVisibility(); // Update UI
+    }
+
+    // 4. Function to attach notification event listeners
+    function setupNotificationListeners() {
+        // Attach click listener to the notification icon/button
+        document.querySelectorAll("[data-el='button-1']").forEach((el) => {
+            el.removeEventListener("click", onButton1Click); // Prevent multiple bindings
+            el.addEventListener("click", onButton1Click);
+        });
+
+        // Attach click listener to the dropdown itself (to close when clicked inside)
+        document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+            el.removeEventListener("click", onDiv1Click); // Prevent multiple bindings
+            el.addEventListener("click", onDiv1Click);
+        });
+    }
+
+    // 5. Function to update the visibility of the notification dropdown
+    function updateNotificationVisibility() {
+        document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+            el.hidden = !state.notifications; // Show/hide based on state
+        });
+    }
+
+    // 6. Optional: Add a click listener to the document to close the dropdown
+    // when clicking anywhere else outside of the notification button or dropdown.
+    document.addEventListener("click", function (event) {
+        const notificationButton = document.querySelector("[data-el='button-1']");
+        const notificationDropdown = document.querySelector("[data-el='div-1']");
+
+        // If the dropdown is open AND the click was not on the button AND not inside the dropdown
+        if (state.notifications && notificationButton && notificationDropdown &&
+            !notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+            state.notifications = false;
+            updateNotificationVisibility();
+        }
+    });
+
+    // --- END: Notification JS Part Integration ---
+
+
+    // Existing form submission logic
+    form.addEventListener('submit', (e) => {
         let valid = true;
         requiredMessages.forEach(msg => msg.classList.add('hidden'));
 
         if (!email.value.trim()) {
-          document.querySelector('#email + .required-message').classList.remove('hidden');
-          valid = false;
+            document.querySelector('#email + .required-message').classList.remove('hidden');
+            valid = false;
         }
 
         if (!password.value.trim()) {
-          document.querySelector('#password + .required-message').classList.remove('hidden');
-          valid = false;
+            document.querySelector('#password + .required-message').classList.remove('hidden');
+            valid = false;
         }
 
         if (!role.value.trim()) {
-          document.querySelector('#role + .required-message').classList.remove('hidden');
-          valid = false;
+            document.querySelector('#role + .required-message').classList.remove('hidden');
+            valid = false;
         }
 
         if (!valid) {
-          e.preventDefault(); // Stop form submission if invalid
+            e.preventDefault(); // Stop form submission if invalid
         }
-      });
-
-      if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-          window.location.href = 'user-management.php';
-        });
-      }
     });
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            window.location.href = 'user-management.php';
+        });
+    }
+
+    // Call the notification setup functions when the DOM is ready
+    setupNotificationListeners();
+    updateNotificationVisibility(); // Set initial visibility (hidden by default)
+});
   </script>
 </body>
 </html>

@@ -16,7 +16,7 @@
         <div class="header-left">
           <div class="logo-container">
             <img
-              src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg"
+              src="../SMKLOGO.png"
               alt="EventFlow Logo"
               class="logo-image"
             />
@@ -30,17 +30,17 @@
         <div class="notification-container">
           <button class="notification-button" data-el="button-1">
             <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
-              <rect width="53" height="57" fill="white"></rect>
+              <rect width="53" height="57" fill="none"></rect>
               <path
                 d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
-                stroke="#1E1E1E"
+                stroke="#FFFFFF"
                 stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               ></path>
               <path
                 d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
-                stroke="#1E1E1E"
+                stroke="#FFFFFF"
                 stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -62,7 +62,7 @@
           >
           
           <a href="../report.html" class="nav-button reports-btn">Reports</a>
-          <a href="user-management.php" class="nav-button users-btn active">Users</a>
+          <a href="user-management.php" class="nav-button users-btn active">Admin</a>
         </div>
         <a href="../index.html" class="logout-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -135,6 +135,70 @@
 
   <script>
   // Get query parameters
+  const state = {
+ notifications: false,
+
+};
+
+function onButton1Click(event) {
+ 
+  state.notifications = !state.notifications;
+  
+  updateNotificationVisibility(); 
+}
+
+
+function onDiv1Click(event) {
+  event.stopPropagation(); 
+  state.notifications = false; 
+  updateNotificationVisibility(); 
+}
+
+
+function setupNotificationListeners() {
+  
+  document.querySelectorAll("[data-el='button-1']").forEach((el) => {
+    
+    el.removeEventListener("click", onButton1Click);
+    el.addEventListener("click", onButton1Click);
+  });
+
+ 
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.removeEventListener("click", onDiv1Click);
+    el.addEventListener("click", onDiv1Click);
+  });
+}
+
+
+function updateNotificationVisibility() {
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.hidden = !state.notifications; 
+  });
+}
+
+
+document.addEventListener("click", function (event) {
+  const notificationButton = document.querySelector("[data-el='button-1']");
+  const notificationDropdown = document.querySelector("[data-el='div-1']");
+
+  
+  if (state.notifications && notificationButton && notificationDropdown &&
+      !notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+    state.notifications = false;
+    updateNotificationVisibility();
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+  setupNotificationListeners();
+  updateNotificationVisibility(); 
+});
+
+
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get('id');
   const userEmail = urlParams.get('email');

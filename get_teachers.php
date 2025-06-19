@@ -5,7 +5,7 @@ $user = 'root';
 $pass = '';
 
 // Create connection
-$conn = new mysqli($host, $user, $pass, $db); // <-- FIXED HERE
+$conn = new mysqli($host, $user, $pass, $db,3307); // <-- FIXED HERE
 
 // Check connection
 if ($conn->connect_error) {

@@ -27,9 +27,9 @@ body {
   justify-content: space-between;
   width: 100%;
   padding: 16px 26px;
-  border-width: 2px;
-  border-color: rgba(0, 0, 0, 0.15);
-  background-color: #fff;
+  /* border-width: 2px; /* You might want to remove this if it creates an unwanted line after changing header color */
+  /* border-color: rgba(0, 0, 0, 0.15); /* You might want to remove this too */
+  background-color: #008B8B; /* Changed from #FF474C (Red) to Light Sea Green */
 }
 
 .header-left {
@@ -62,20 +62,20 @@ body {
 .company-name {
   font-size: 26px;
   font-weight: 600;
-  color: #333;
+  color: white; /* Changed from #333 to White */
   margin: 0;
   line-height: 1.2;
 }
 
 .company-tagline {
   font-size: 14px;
-  color: #666;
+  color: white; /* Changed from #666 to White */
   margin: 0;
 }
 
 .welcome-message {
   font-size: 20px;
-  color: #333;
+  color: white; /* Changed from #333 to White */
   font-weight: 500;
   text-align: center;
 }
@@ -93,15 +93,18 @@ body {
   padding: 8px;
   border-radius: 50%;
   transition: background-color 0.2s;
+  color: #FFFFFF /* Ensures bell/user icons are white */
 }
 
 .notification-button:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.1); /* Changed from #f5f5f5 to subtle white overlay */
 }
 
 .notification-icon {
   width: 28px;
   height: 28px;
+  
+  /* color: #FFFFFF; /* If your icons are SVG or font icons, this will change their color */
 }
 
 .notification-dropdown {
@@ -138,7 +141,7 @@ body {
 /* Sidebar styles */
 .sidebar {
   width: 250px;
-  background-color: #fff;
+  background-color: #20B2AA; /* Changed from #FFFFE0 (Light Yellow) to Light Sea Green */
   border-right: 2px solid #e8e8e8;
   padding: 20px 0 0 0;
   display: flex;
@@ -169,18 +172,18 @@ body {
   cursor: pointer;
   text-align: left;
   font-size: 16px;
-  color: #333;
+  color: #FFFFFF; /* Changed from #333 to White */
   transition: all 0.2s;
 }
 
 .nav-button:hover {
-  background-color: #f5f5f5;
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.1); /* Changed from #f5f5f5 to subtle white overlay */
+  color: #FFFFFF; /* Ensure color stays white on hover */
 }
 
 .sidebar .nav-button.active {
-  background-color: #ebebeb; /* Highlight the active button */
-   /* Change text color for active button */
+  background-color: #1A9086; /* Changed from #ebebeb to a slightly darker turquoise */
+  color: #FFFFFF; /* Ensures text color for active button is white */
   text-decoration: none; /* Remove underline */
 }
 
@@ -195,24 +198,28 @@ body {
   width: 100%;
   text-align: left;
   font-size: 16px;
-  color: #ed0b0e;
+  color: #FFFFFF; /* Changed from #ed0b0e (Red) to White for consistency */
   transition: all 0.2s;
   margin-top: auto;
   border-top: 2px solid #e8e8e8;
 }
 
 .logout-button:hover {
-  background-color: #fff1f1;
+  background-color: rgba(255, 255, 255, 0.1); /* Changed from #fff1f1 to subtle white overlay */
+  color: #FFFFFF; /* Ensure color stays white on hover */
 }
 
-.logout-button {
+/* This rule is redundant and might be causing issues. Remove it or ensure it's not overriding other rules. */
+/* .logout-button {
   text-decoration: none;
   color: red;
-}
+} */
 
-.logout-button:hover {
+/* This rule is redundant and might be causing issues. Remove it. */
+/* .logout-button:hover {
   text-decoration: none;
-}
+} */
+
 
 /* Main content area */
 .main-content {
@@ -221,13 +228,13 @@ body {
   padding: 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+ align-items: flex-start; /* CHANGED: Aligns content to the left */
   justify-content: flex-start;
   overflow: auto;
   height: calc(100vh - 90px);
   border-right: 2px solid #e8e8e8;
   border-left: 2px solid #e8e8e8;
-  position: relative;
+  position: relative;
 }
 
 .content-wrapper {
@@ -238,8 +245,8 @@ body {
 }
 
 .add-event-button {
+  background-color: #20B2AA; /* Changed from #4a90e2 (Blue) to Teal */
   padding: 12px 24px;
-  background-color: #4a90e2;
   color: white;
   border: none;
   border-radius: 6px;
@@ -247,12 +254,11 @@ body {
   font-size: 16px;
   font-weight: 500;
   transition: background-color 0.2s;
-  margin-bottom: 20px;
-  align-self: flex-start;
+  display: flex;
 }
 
 .add-event-button:hover {
-  background-color: #357abd;
+  background-color: #006666; /* Darker Teal on hover */
 }
 
 .content-wrapper {
@@ -316,7 +322,7 @@ body {
 
 .month-select:hover,
 .year-select:hover {
-  border-color: #4a90e2;
+  border-color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
 }
 
 /* Calendar container */
@@ -376,15 +382,15 @@ body {
 }
 
 .calendar-day.today {
-  background-color: #e6f0fa;
-  border-color: #4a90e2;
+  background-color: #E0F2F2; /* Changed from #e6f0fa (Light Blue) to a lighter Teal */
+  border-color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
   font-weight: bold;
 }
 
 .calendar-day.selected {
-  background-color: #4a90e2;
+  background-color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
   color: white;
-  border-color: #4a90e2;
+  border-color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
 }
 
 .calendar-day.has-events {
@@ -400,7 +406,7 @@ body {
   transform: translateX(-50%);
   width: 6px;
   height: 6px;
-  background-color: #4a90e2;
+  background-color: #20B2AA; /* Changed from #4a90e2 (Blue) to Teal */
   border-radius: 50%;
 }
 
@@ -459,7 +465,7 @@ body {
 
 #selected-date-display {
   font-weight: 600;
-  color: #4a90e2;
+  color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
 }
 
 .event-list {
@@ -485,7 +491,7 @@ body {
   border-radius: 6px;
   padding: 12px;
   margin-bottom: 12px;
-  border-left: 4px solid #4a90e2;
+  border-left: 4px solid #20B2AA; /* Changed from #4a90e2 (Blue) to Teal */
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -495,8 +501,8 @@ body {
 }
 
 .event-item.selected {
-  background-color: #e6f0fa;
-  border-left-color: #357abd;
+  background-color: #E0F2F2; /* Changed from #e6f0fa (Light Blue) to a lighter Teal */
+  border-left-color: #006666; /* Changed from #357abd (Dark Blue) to a darker Teal */
 }
 
 .event-time {
@@ -549,8 +555,6 @@ body {
   border-top: 1px solid #e8e8e8;
 }
 
-
-
 .input-error {
   border-color: red;
 }
@@ -567,9 +571,8 @@ body {
 }
 
 
-
 .event-label {
-  background-color: #1976d2;
+  background-color:  #20B2AA; /* Changed from #1976d2 (Blue) to Teal */
   color: white;
   font-size: 12px;
   padding: 2px 6px;
@@ -660,7 +663,7 @@ body {
 }
 
 .form-input:focus {
-  border-color: #4a90e2;
+  border-color: #008080; /* Changed from #4a90e2 (Blue) to Teal */
   outline: none;
 }
 
@@ -681,12 +684,12 @@ body {
 }
 
 .confirm-button {
-  background-color: #4caf50;
+  background-color: #4caf50; /* Keep green for confirmation */
   color: white;
 }
 
 .cancel-button {
-  background-color: #f44336;
+  background-color: #f44336; /* Keep red for cancellation */
   color: white;
 }
 
@@ -783,12 +786,12 @@ body {
 }
 
 #delete-confirmation-modal .modal-btn.confirm {
-  background-color: #4caf50;
+  background-color: #4caf50; /* Keep green for confirmation */
   color: white;
 }
 
 #delete-confirmation-modal .modal-btn.cancel {
-  background-color: #f44336;
+  background-color: #f44336; /* Keep red for cancellation */
   color: white;
 }
 
@@ -802,8 +805,8 @@ body {
 
 .tag {
   display: inline-block;
-  background: #e0e7ff;
-  color: #3730a3;
+  background: #20B2AA; /* Changed from #e0e7ff (Light Blue) to Teal */
+  color: #FFFFFF; /* Changed from #3730a3 to White */
   border-radius: 12px;
   padding: 2px 10px;
   margin: 2px 2px 2px 0;
@@ -813,3 +816,80 @@ body {
   background: #f3f4f6;
   color: #6b7280;
 }
+
+
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.notification-list li {
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #e0f2f1;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-list li.unread {
+  background-color: #c1f1f0;
+  font-weight: 600;
+}
+
+.notification-list li.read {
+  background-color: #f2f2f2;
+  color: #666;
+  font-weight: normal;
+}
+
+.notification-list li:hover {
+  background-color: #b2dfdb;
+}
+
+.mark-read-btn {
+  background-color: #20B2AA;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.mark-read-btn:hover {
+  background-color: #008080;
+}
+
+/* Container for dashboard action buttons */
+.dashboard-actions {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+
+#importForm {
+  display: inline-block; /* Allows the form to sit inline within the flex container */
+  margin: 0;
+  padding: 0;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: none;
+}
+
+

@@ -4,7 +4,7 @@ $user = 'root';
 $password = '';
 $db = 'school_system';
 
-$conn = new mysqli($host, $user, $password, $db,3306);
+$conn = new mysqli($host, $user, $password, $db,3307);
 if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }

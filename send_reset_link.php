@@ -10,7 +10,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$conn = new mysqli($host, $user, $pass, $db,3306);
+$conn = new mysqli($host, $user, $pass, $db,3307);
 if ($conn->connect_error) die("DB error: " . $conn->connect_error);
 
 $email = $_POST['email'];
@@ -45,7 +45,7 @@ if ($result->num_rows === 1) {
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
-        $mail->setFrom('yourgmail@gmail.com', 'SK Saujana System');
+        $mail->setFrom('schoolsksajuna79@gmail.com', 'SK Saujana System');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Request';

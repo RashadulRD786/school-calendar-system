@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showEventPanel: false,
     showEventForm: false,
     isEditingEvent: false,
+    notificationsList: [],
+    unreadCount: 0,
+
     eventDetails: {
       name: "",
       day: "",
@@ -66,16 +69,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Notification button
     document.querySelectorAll("[data-el='button-1']").forEach((el) => {
-      el.removeEventListener("click", onButton1Click);
-      el.addEventListener("click", onButton1Click);
-    });
+  el.removeEventListener("click", () => {});
+  el.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const dropdown = el.querySelector("[data-el='div-1']");
+    if (dropdown) {
+      dropdown.hidden = !dropdown.hidden;
+    }
+  });
+});
 
-    document.querySelectorAll("[data-el='div-1']").forEach((el) => {
-      el.hidden = !state.notifications;
+// Hide the dropdown if you click anywhere outside
+document.addEventListener("click", (e) => {
+  const button = document.querySelector("[data-el='button-1']");
+  const dropdown = button?.querySelector("[data-el='div-1']");
+  if (dropdown && !button.contains(e.target)) {
+    dropdown.hidden = true;
+  }
+});
 
-      el.removeEventListener("click", onDiv1Click);
-      el.addEventListener("click", onDiv1Click);
-    });
 
     // Add Event button
     document.querySelectorAll("[data-el='button-2']").forEach((el) => {
@@ -212,6 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event handler for notification button click
   function onButton1Click(event) {
     state.notifications = !state.notifications;
+    renderNotificationsDropdown();
+  updateNotificationBadge();
     update();
   }
 
@@ -438,6 +452,16 @@ document.addEventListener("DOMContentLoaded", () => {
   
       // 📨 Send new event to server
       submitEventToServer(updatedEvent);
+
+      state.notificationsList.unshift({
+  id: Date.now(),
+  message: `New event created: ${updatedEvent.name}`,
+  read: false,
+  eventId: newEvent.id,
+});
+state.unreadCount++;
+updateNotificationBadge();
+
   
       // 🔁 Set selectedDate
       const [year, month, day] = updatedEvent.date.split("-").map(Number);
@@ -455,6 +479,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendarDays();
     updateEventDetailsPanel();
     update();
+    location.reload();
+    
   }
   
 
@@ -469,7 +495,8 @@ function submitEventToServer(data) {
       .then((response) => response.text())
       .then((result) => {
         console.log("✅ Server response:", result);
-        fetchEventsFromDB(); // reload events from DB after saving
+        fetchEventsFromDB();
+          // reload events from DB after saving
       })
       .catch((error) => {
         console.error("❌ Failed to submit event:", error);
@@ -1266,6 +1293,79 @@ function setupModalButtons() {
   document.getElementById("delete-cancel-button").onclick = handleDeleteCancel;
 }
 
+function renderNotificationsDropdown() {
+  const dropdown = document.querySelector(".notification-dropdown");
+  if (!dropdown) return;
+
+  if (state.notificationsList.length === 0) {
+    dropdown.innerHTML = `
+      <h3 class="notification-title">Notifications</h3>
+      <p class="notification-message">No new notifications</p>
+    `;
+    return;
+  }
+
+  dropdown.innerHTML = `
+    <h3 class="notification-title">Notifications</h3>
+    <div class="notification-list">
+      ${state.notificationsList.map((notif) => `
+        <div class="notification-item ${notif.read ? 'read' : 'unread'}" data-id="${notif.id}">
+          <p>${notif.message}</p>
+          <button class="mark-read-btn" data-id="${notif.id}">Mark as Read</button>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  dropdown.querySelectorAll(".notification-item").forEach((item) => {
+    const id = parseInt(item.dataset.id);
+    item.addEventListener("click", () => {
+      const notif = state.notificationsList.find((n) => n.id === id);
+      if (!notif) return;
+
+      const event = state.events.find((e) => e.id === notif.eventId);
+      if (event) {
+        openViewEventModal(event);
+        toggleModal("view-event-modal", true);
+      }
+    });
+  });
+
+  dropdown.querySelectorAll(".mark-read-btn").forEach((btn) => {
+    const id = parseInt(btn.dataset.id);
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const notif = state.notificationsList.find((n) => n.id === id);
+      if (notif && !notif.read) {
+        notif.read = true;
+        state.unreadCount--;
+        updateNotificationBadge();
+        renderNotificationsDropdown();
+      }
+    });
+  });
+}
+
+function updateNotificationBadge() {
+  const bell = document.querySelector(".notification-button");
+  if (!bell) return;
+
+  let badge = bell.querySelector(".notification-badge");
+  if (!badge) {
+    badge = document.createElement("div");
+    badge.className = "notification-badge";
+    bell.appendChild(badge);
+  }
+
+  if (state.unreadCount > 0) {
+    badge.textContent = state.unreadCount;
+    badge.style.display = "block";
+  } else {
+    badge.style.display = "none";
+  }
+}
+
+
 function populateTeacherDropdown(dropdownId, selectedValues = []) {
   fetch("get_teachers.php")
     .then(res => res.json())
@@ -1303,11 +1403,16 @@ function populateTeacherDropdown(dropdownId, selectedValues = []) {
     });
 }
 
+
+
 window.addEventListener("DOMContentLoaded", () => {
   setupCloseButtons();
   setupModalButtons();
   populateTeacherDropdown("involvement-select");
   populateTeacherDropdown("edit-involvement");
+  
+  renderNotificationsDropdown();
+updateNotificationBadge();
 
   // ✅ Update edit-day when edit-date changes
   const editDateInput = document.getElementById("edit-date");

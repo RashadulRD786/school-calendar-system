@@ -73,19 +73,39 @@
     <header class="dashboard-header">
       <div class="header-left">
         <div class="logo-container">
-          <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="EventFlow Logo" class="logo-image" />
+          <img src="../SMKLOGO.png" alt="EventFlow Logo" class="logo-image" />
         </div>
         <div class="header-text">
           <h1 class="company-name">SK SAUJANA UTAMA</h1>
           <p class="company-tagline">Event Management System</p>
         </div>
       </div>
-      <div class="welcome-message">Welcome Admin 👋</div>
+      <div class="welcome-message">Welcome  Admin 👋</div>
       <div class="notification-container">
-        <button class="notification-button">
-          <img src="https://c.animaapp.com/d3SSWScQ/img/notification-03.svg" alt="Notification Icon" class="notification-icon" />
-        </button>
-      </div>
+          <button class="notification-button" data-el="button-1">
+            <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
+              <rect width="53" height="57" fill="none"></rect>
+              <path
+                d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
+                stroke="#FFFFFF"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
+                stroke="#FFFFFF"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+            <div class="notification-dropdown" data-el="div-1" hidden>
+              <h3 class="notification-title">Notifications</h3>
+              <p class="notification-message">No new notifications</p>
+            </div>
+          </button>
+        </div>
     </header>
 
     <div class="dashboard-content">
@@ -94,7 +114,7 @@
           <a href="../admin-dashboard1.html" class="nav-button dashboard-btn">Dashboard</a>
           
           <a href="../report.html" class="nav-button reports-btn">Reports</a>
-          <a href="user-management.php" class="nav-button users-btn active">Users</a>
+          <a href="user-management.php" class="nav-button users-btn active">Admin</a>
         </div>
         <a href="../index.html" class="logout-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -130,7 +150,7 @@
           $username = 'root';
           $password = '';
           $database = 'school_system';
-          $conn = new mysqli($host, $username, $password, $database,3306);
+          $conn = new mysqli($host, $username, $password, $database,3307);
           if ($conn->connect_error) {
               die("Connection failed: " . $conn->connect_error);
           }
@@ -152,6 +172,70 @@
   </div>
 
   <script>
+    const state = {
+ notifications: false,
+
+};
+
+function onButton1Click(event) {
+ 
+  state.notifications = !state.notifications;
+  
+  updateNotificationVisibility(); 
+}
+
+
+function onDiv1Click(event) {
+  event.stopPropagation(); 
+  state.notifications = false; 
+  updateNotificationVisibility(); 
+}
+
+
+function setupNotificationListeners() {
+  
+  document.querySelectorAll("[data-el='button-1']").forEach((el) => {
+    
+    el.removeEventListener("click", onButton1Click);
+    el.addEventListener("click", onButton1Click);
+  });
+
+ 
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.removeEventListener("click", onDiv1Click);
+    el.addEventListener("click", onDiv1Click);
+  });
+}
+
+
+function updateNotificationVisibility() {
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.hidden = !state.notifications; 
+  });
+}
+
+
+document.addEventListener("click", function (event) {
+  const notificationButton = document.querySelector("[data-el='button-1']");
+  const notificationDropdown = document.querySelector("[data-el='div-1']");
+
+  
+  if (state.notifications && notificationButton && notificationDropdown &&
+      !notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+    state.notifications = false;
+    updateNotificationVisibility();
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+  setupNotificationListeners();
+  updateNotificationVisibility(); 
+});
+
+
     // Function to handle Edit
    function editUser(userId, userEmail, userRole,userName) {
       // Redirect to edit-user.html with query parameters
@@ -163,20 +247,26 @@ let selectedUserId = null;
 
 function confirmDelete(userId) {
   selectedUserId = userId;
+  document.getElementById('deleteUserId').value = userId;
   document.getElementById('deleteConfirmationModal').classList.remove('hidden');
 }
 
-// Confirm delete
-document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-  if (selectedUserId) {
-    window.location.href = `delete-user.php?id=${selectedUserId}`;
-  }
-});
+
 
 // Cancel or close modal
-document.getElementById('cancelDeleteBtn').addEventListener('click', closeModal);
-document.getElementById('closeDeleteModal').addEventListener('click', closeModal);
+window.addEventListener('DOMContentLoaded', () => {
+    const cancelBtn = document.getElementById('cancelDeleteBtn');
+    const closeBtn = document.getElementById('closeDeleteModal');
 
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', closeModal);
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+  });
+  
 function closeModal() {
   document.getElementById('deleteConfirmationModal').classList.add('hidden');
   selectedUserId = null;

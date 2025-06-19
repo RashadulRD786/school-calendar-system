@@ -6,7 +6,7 @@ $host = 'localhost';
 $db = 'school_system';
 $user = 'root';
 $pass = '';
-$port = 3306; // Make sure this port is correct for your MySQL setup
+$port = 3307; // Make sure this port is correct for your MySQL setup
 
 $response = []; // Initialize an array to hold the response
 
