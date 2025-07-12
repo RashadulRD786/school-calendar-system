@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delete Events - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Wix Madefor Display", sans-serif;
+      background-color: #fff;
+    }
+
+    .dashboard-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      background-color: #fff;
+      overflow: hidden;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 26px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+      background-color: #008B8B;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-container {
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .company-name {
+      font-size: 26px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .company-tagline {
+      font-size: 14px;
+      color: white;
+    }
+
+    .welcome-message {
+      font-size: 20px;
+      color: white;
+      font-weight: 500;
+    }
+
+    .notification-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .notification-button {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .notification-button:hover {
+      background-color: #f5f5f5;
+    }
+
+    .notification-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .notification-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0px;
+      width: 300px;
+      background-color: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      z-index: 10;
+    }
+
+    .notification-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .notification-message {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .dashboard-content {
+      display: flex;
+      flex: 1;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #20B2AA;
+      border-right: 2px solid #e8e8e8;
+      padding: 20px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: calc(100vh - 90px);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+   .nav-button {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  color: #FFFFFF; /* Changed from #333 to White */
+  transition: all 0.2s;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Changed from #f5f5f5 to subtle white overlay */
+  color: #FFFFFF; /* Ensure color stays white on hover */
+}
+    .sidebar .nav-button.active {
+  background-color: #1A9086; /* Changed from #ebebeb to a slightly darker turquoise */
+  color: #FFFFFF; /* Ensures text color for active button is white */
+  text-decoration: none; /* Remove underline */
+}
+
+    .logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  color: #FFFFFF; /* Changed from #ed0b0e (Red) to White for consistency */
+  transition: all 0.2s;
+  margin-top: auto;
+  border-top: 2px solid #e8e8e8;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Changed from #fff1f1 to subtle white overlay */
+  color: #FFFFFF; /* Ensure color stays white on hover */
+}
+    .container {
+      flex: 1;
+      padding: 40px;
+      background-color: #fafafa;
+    }
+
+    .container h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .form-group input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+  }
+
+
+    .button-group {
+      margin-top: 20px;
+    }
+
+    .btn-export {
+      background-color:  #20B2AA;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-export:hover {
+      background-color: #006666;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <div class="logo-container">
+          <img
+            src="SMKLOGO.png"
+            alt="EventFlow Logo"
+            class="logo-image"
+          />
+        </div>
+        <div class="header-text">
+          <h1 class="company-name">SK SAUJANA UTAMA</h1>
+          <p class="company-tagline">Event Management System</p>
+        </div>
+      </div>
+      <div class="welcome-message">Welcome Admin 👋</div>
+      <div class="notification-container">
+        <button class="notification-button">
+          <!-- your bell icon here -->
+          <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
+            <path
+              d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
+              stroke="#FFFFFF"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
+              stroke="#FFFFFF"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <nav class="sidebar">
+        <div class="nav-links">
+          <a href="admin-dashboard1.html" class="nav-button dashboard-btn">Dashboard</a>
+          <a href="reports.html" class="nav-button reports-btn">Reports</a>
+          <a href="delete_events.html" class="nav-button reports-btn active">Delete Events</a>
+          <a href="user-management/user-management.php" class="nav-button users-btn">Admin</a>
+        </div>
+        <a href="index.html" class="logout-button">Logout</a>
+      </nav>
+
+      <div class="container">
+        <h2>Delete Events by Date Range</h2>
+       <form id="deleteForm">
+  <div class="form-group">
+    <label for="from">From Date</label>
+    <input type="date" id="from" name="from" required />
+  </div>
+  <div class="form-group">
+    <label for="to">To Date</label>
+    <input type="date" id="to" name="to" required />
+  </div>
+  <div class="button-group">
+    <button type="submit" class="btn-export" style="background-color: red;">Delete</button>
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+  <script>
+document.getElementById('deleteForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  if (!confirm("⚠ Are you sure you want to delete all events in this range? This cannot be undone.")) {
+    return;
+  }
+
+  const formData = new FormData(this);
+
+  fetch('delete_events.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    if (data.success) {
+      window.location.href = "admin-dashboard1.html"; // redirect after success
+    }
+  })
+  .catch(err => {
+    console.error("❌ Error:", err);
+    alert("Delete request failed. Check console for details.");
+  });
+});
+</script>
+
+</body>
+</html>
