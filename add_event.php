@@ -45,6 +45,20 @@ if ($stmt->execute()) {
 
     sendEventNotification($eventData);
 
+    // Add notification to DB for admin dropdown
+    $notif_event_id = $conn->insert_id;
+    $notif_sql = "INSERT INTO notifications (event_id, event_name, event_date, event_time, is_read, created_at) VALUES (?, ?, ?, ?, 0, NOW())";
+    $notif_stmt = $conn->prepare($notif_sql);
+    if ($notif_stmt) {
+        $notif_stmt->bind_param("isss", $notif_event_id, $name, $date, $time);
+        if (!$notif_stmt->execute()) {
+            echo "❌ Notification insert error: " . $notif_stmt->error;
+        }
+        $notif_stmt->close();
+    } else {
+        echo "❌ Notification prepare error: " . $conn->error;
+    }
+
 } else {
     echo "❌ Failed to add event: " . $stmt->error;
 }
