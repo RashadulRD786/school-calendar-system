@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Delete Events - Admin Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="delete_events.css" />
   <style>
+    /* Your existing CSS */
     * {
       margin: 0;
       padding: 0;
@@ -77,53 +79,7 @@
       font-weight: 500;
     }
 
-    .notification-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .notification-button {
-      position: relative;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      transition: background-color 0.2s;
-    }
-
-    .notification-button:hover {
-      background-color: #f5f5f5;
-    }
-
-    .notification-icon {
-      width: 28px;
-      height: 28px;
-    }
-
-    .notification-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0px;
-      width: 300px;
-      background-color: #fff;
-      border: 1px solid #e8e8e8;
-      border-radius: 4px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 16px;
-      z-index: 10;
-    }
-
-    .notification-title {
-      font-size: 16px;
-      font-weight: 500;
-      margin-bottom: 12px;
-    }
-
-    .notification-message {
-      font-size: 14px;
-      color: #666;
-    }
+   
 
     .dashboard-content {
       display: flex;
@@ -153,48 +109,48 @@
       color: inherit;
     }
 
-   .nav-button {
-  padding: 12px 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-size: 16px;
-  color: #FFFFFF; /* Changed from #333 to White */
-  transition: all 0.2s;
-}
+    .nav-button {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-size: 16px;
+      color: #FFFFFF;
+      transition: all 0.2s;
+    }
 
-.nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Changed from #f5f5f5 to subtle white overlay */
-  color: #FFFFFF; /* Ensure color stays white on hover */
-}
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
     .sidebar .nav-button.active {
-  background-color: #1A9086; /* Changed from #ebebeb to a slightly darker turquoise */
-  color: #FFFFFF; /* Ensures text color for active button is white */
-  text-decoration: none; /* Remove underline */
-}
+      background-color: #1A9086;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
 
     .logout-button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  font-size: 16px;
-  color: #FFFFFF; /* Changed from #ed0b0e (Red) to White for consistency */
-  transition: all 0.2s;
-  margin-top: auto;
-  border-top: 2px solid #e8e8e8;
-}
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-size: 16px;
+      color: #FFFFFF;
+      transition: all 0.2s;
+      margin-top: auto;
+      border-top: 2px solid #e8e8e8;
+    }
 
-.logout-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Changed from #fff1f1 to subtle white overlay */
-  color: #FFFFFF; /* Ensure color stays white on hover */
-}
+    .logout-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
     .container {
       flex: 1;
       padding: 40px;
@@ -226,21 +182,20 @@
     }
 
     .form-group select {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-  }
-
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #fff;
+    }
 
     .button-group {
       margin-top: 20px;
     }
 
     .btn-export {
-      background-color:  #20B2AA;
+      background-color:  #20B2AA;
       color: white;
       border: none;
       padding: 10px 24px;
@@ -253,6 +208,140 @@
     .btn-export:hover {
       background-color: #006666;
     }
+
+    /* --- Modal Styles --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* Ensures it's on top of other content */
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 450px; /* Smaller width for confirmation dialogs */
+      text-align: center;
+      position: relative; /* For positioning close button */
+    }
+
+    .modal-title {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .modal-message {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center; /* Center the buttons */
+      gap: 15px; /* Space between buttons */
+      margin-top: 20px;
+    }
+
+    .btn-danger {
+      background-color: #dc3545; /* Red */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s;
+    }
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d; /* Gray */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .close-modal-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+      padding: 0;
+      z-index: 10;
+    }
+
+    .close-modal-button:hover {
+      color: #333;
+    }
+
+    /* --- Styles for the on-page status message --- */
+    .status-message {
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+        color: #fff; /* White text */
+        font-weight: bold;
+        opacity: 0; /* Start completely transparent */
+        transition: opacity 0.3s ease-in-out; /* Smooth fade in/out effect */
+        max-width: 600px; /* Limit width */
+        margin-left: auto; /* Center the block */
+        margin-right: auto; /* Center the block */
+    }
+
+    /* Specific background colors for success and error */
+    .status-message.success {
+        background-color: #28a745; /* Green for success */
+    }
+
+    .status-message.error {
+        background-color: #dc3545; /* Red for error */
+    }
+
+    /* Class to make the message visible (fades in) */
+    .status-message.visible {
+        opacity: 1;
+    }
+
+
+    /* Important: Hide elements marked with 'hidden' attribute */
+/* Styles for the Notification Container */
+
+
+
+
+/* Important: Hide elements marked with 'hidden' attribute */
+[hidden] {
+    display: none !important;
+}
+  
+
   </style>
 </head>
 <body>
@@ -273,33 +362,38 @@
       </div>
       <div class="welcome-message">Welcome Admin 👋</div>
       <div class="notification-container">
-        <button class="notification-button">
-          <!-- your bell icon here -->
-          <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
-            <path
-              d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
-              stroke="#FFFFFF"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
-              stroke="#FFFFFF"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </svg>
-        </button>
-      </div>
+          <button class="notification-button" data-el="button-1">
+            <svg viewBox="0 0 53 58" fill="none" class="notification-icon">
+              <rect width="53" height="57" fill="none"></rect>
+              <path
+                d="M5.58695 34.1858C5.11735 37.3994 7.21688 39.6297 9.78749 40.7412C19.6427 45.0029 33.3574 45.0029 43.2125 40.7412C45.7832 39.6297 47.8827 37.3994 47.4132 34.1858C47.1246 32.2109 45.6975 30.5665 44.6402 28.9608C43.2553 26.8316 43.1178 24.5093 43.1175 22.0386C43.1175 12.4904 35.6777 4.75 26.5 4.75C17.3225 4.75 9.88262 12.4904 9.88262 22.0386C9.8824 24.5093 9.7448 26.8316 8.35993 28.9608C7.30265 30.5665 5.87556 32.2109 5.58695 34.1858Z"
+                stroke="#FFFFFF"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M19.875 53.4375C21.6331 54.9145 23.9549 55.8125 26.5 55.8125C29.0451 55.8125 31.3669 54.9145 33.125 53.4375"
+                stroke="#FFFFFF"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+            <span id="notification-badge" style="position:absolute;top:2px;right:2px;background:#ed1c24;color:#fff;font-size:13px;font-weight:600;padding:2px 7px;border-radius:12px;display:none;z-index:11;"></span>
+            <div class="notification-dropdown" data-el="div-1" hidden>
+              <h3 class="notification-title">Notifications</h3>
+              <p class="notification-message">No new notifications</p>
+            </div>
+          </button>
+        </div>
     </header>
 
     <div class="dashboard-content">
       <nav class="sidebar">
         <div class="nav-links">
           <a href="admin-dashboard1.html" class="nav-button dashboard-btn">Dashboard</a>
-          <a href="reports.html" class="nav-button reports-btn">Reports</a>
+          <a href="report.html" class="nav-button reports-btn">Reports</a>
           <a href="delete_events.html" class="nav-button reports-btn active">Delete Events</a>
           <a href="user-management/user-management.php" class="nav-button users-btn">Admin</a>
         </div>
@@ -308,50 +402,438 @@
 
       <div class="container">
         <h2>Delete Events by Date Range</h2>
-       <form id="deleteForm">
-  <div class="form-group">
-    <label for="from">From Date</label>
-    <input type="date" id="from" name="from" required />
-  </div>
-  <div class="form-group">
-    <label for="to">To Date</label>
-    <input type="date" id="to" name="to" required />
-  </div>
-  <div class="button-group">
-    <button type="submit" class="btn-export" style="background-color: red;">Delete</button>
-  </div>
-</form>
-
+        <div id="statusMessage" class="status-message" hidden></div>
+        
+        <form id="deleteForm">
+          <div class="form-group">
+            <label for="from">From Date</label>
+            <input type="date" id="from" name="from" required />
+          </div>
+          <div class="form-group">
+            <label for="to">To Date</label>
+            <input type="date" id="to" name="to" required />
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn-export" style="background-color: red;">Delete</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+
+  <div id="confirmDeleteModal" class="modal-overlay" hidden>
+    <div class="modal-content">
+        <h3 class="modal-title">Confirm Deletion</h3>
+        <button class="close-modal-button" id="confirm-delete-close-button">&times;</button>
+        <p class="modal-message">Are you sure you want to delete all events in this range? This cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-danger" id="confirmDeleteYes">Delete</button>
+            <button type="button" class="btn btn-secondary" id="confirmDeleteNo">Cancel</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Notification Modal & Dropdown System -->
+  <div class="modal view-event-modal" id="view-event-modal" hidden>     
+            <button class="close-modal-button" id="view-close-button">&times;</button>
+            <h2 class="modal-title">Event Details</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="view-name" class="form-label">Event Name</label>
+                    <input type="text" id="view-name" class="form-input" readonly>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="view-date" class="form-label">Day</label>
+                        <input type="text" id="view-day" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view-day" class="form-label">Date</label>
+                        <input type="date" id="view-date" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="view-time" class="form-label">Time</label>
+                        <input type="text" id="view-time" class="form-input" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="view-location" class="form-label">Location</label>
+                    <input type="text" id="view-location" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-involvement" class="form-label">Involvement</label>
+                    <div id="view-involvement" class="form-input" style="min-height:2em;"></div>
+                </div>
+                <div class="form-group">
+                    <label for="view-person" class="form-label">Person in Charge</label>
+                    <input type="text" id="view-person" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-unit" class="form-label">Unit</label>
+                    <input type="text" id="view-unit" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="view-status" class="form-label">Status</label>
+                    <input type="text" id="view-status" class="form-input" readonly>
+                </div>
+                
+                
+            </div>
+</div>
+   
+
+
+
   <script>
-document.getElementById('deleteForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+    // Get references to modal elements
+    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    const confirmDeleteYesBtn = document.getElementById('confirmDeleteYes');
+    const confirmDeleteNoBtn = document.getElementById('confirmDeleteNo');
+    const confirmDeleteCloseBtn = document.getElementById('confirm-delete-close-button'); // Get reference to the 'x' close button
 
-  if (!confirm("⚠ Are you sure you want to delete all events in this range? This cannot be undone.")) {
-    return;
-  }
+    // Get reference to the new status message display area
+    const statusMessageDiv = document.getElementById('statusMessage');
 
-  const formData = new FormData(this);
-
-  fetch('delete_events.php', {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message);
-    if (data.success) {
-      window.location.href = "admin-dashboard1.html"; // redirect after success
+    // Function to show the confirmation modal
+    function showConfirmDeleteModal() {
+        confirmDeleteModal.hidden = false;
     }
-  })
-  .catch(err => {
-    console.error("❌ Error:", err);
-    alert("Delete request failed. Check console for details.");
-  });
-});
-</script>
 
+    // Function to hide the confirmation modal
+    function hideConfirmDeleteModal() {
+        confirmDeleteModal.hidden = true;
+    }
+
+    // Function to display the on-page status message
+    // 'type' can be 'success' or 'error' for styling
+    function showStatusMessage(message, type = 'success') {
+        statusMessageDiv.textContent = message; // Set the text content
+        // Set classes for styling (success/error) and visibility (visible)
+        statusMessageDiv.className = `status-message ${type} visible`;
+        statusMessageDiv.hidden = false; // Ensure the element is not hidden by attribute
+    }
+
+    // Function to hide the on-page status message
+    function hideStatusMessage() {
+        statusMessageDiv.className = 'status-message'; // Remove 'visible' to fade out
+        // After transition, fully hide the element to remove it from layout flow
+        setTimeout(() => { statusMessageDiv.hidden = true; }, 300); // Matches CSS transition duration
+    }
+
+
+    // Event listener for the form submission
+    document.getElementById('deleteForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission initially
+        hideStatusMessage(); // Hide any previous messages before showing confirmation
+        showConfirmDeleteModal(); // Show our custom confirmation modal
+    });
+
+    // Event listener for "Yes, Delete" button on the modal
+    confirmDeleteYesBtn.addEventListener('click', function() {
+        hideConfirmDeleteModal(); // Hide the modal
+
+        // Now, proceed with the actual delete request
+        const formData = new FormData(document.getElementById('deleteForm'));
+
+        fetch('delete_events.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => {
+            // Check if the response is OK (status 2xx)
+            if (!res.ok) {
+                // If not OK, try to read the error message from the response body
+                return res.text().then(text => { throw new Error(`HTTP error! Status: ${res.status}, Message: ${text}`); });
+            }
+            return res.json(); // Attempt to parse as JSON
+        })
+        .then(data => {
+            if (data.success) {
+                showStatusMessage(data.message, 'success'); // Show custom success message
+                setTimeout(() => {
+                    hideStatusMessage(); // Hide message after a brief delay
+                    window.location.href = "admin-dashboard1.html"; // Then redirect
+                }, 2000); // Show message for 2 seconds before redirecting
+            } else {
+                showStatusMessage(data.message, 'error'); // Show custom error message from server
+                setTimeout(hideStatusMessage, 3000); // Hide error message after 3 seconds
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error:", err);
+            // Show a generic error message if fetch itself fails or parsing fails
+            showStatusMessage("Delete request failed. Check console for more details. " + err.message, 'error');
+            setTimeout(hideStatusMessage, 5000); // Keep error message visible longer
+        });
+    });
+
+    // Event listener for "No, Cancel" button on the modal
+    confirmDeleteNoBtn.addEventListener('click', function() {
+        hideConfirmDeleteModal(); // Just hide the modal, do nothing else
+    });
+
+    // Event listener for the 'x' close button on the delete confirmation modal
+    confirmDeleteCloseBtn.addEventListener('click', function() {
+        hideConfirmDeleteModal(); // Reuse the existing hide function
+    });
+
+
+ const state = {
+ notifications: false,
+
+};
+
+function onButton1Click(event) {
+ 
+  state.notifications = !state.notifications;
+  
+  updateNotificationVisibility(); 
+}
+
+
+function onDiv1Click(event) {
+  event.stopPropagation(); 
+  state.notifications = false; 
+  updateNotificationVisibility(); 
+}
+
+
+function setupNotificationListeners() {
+  
+  document.querySelectorAll("[data-el='button-1']").forEach((el) => {
+    
+    el.removeEventListener("click", onButton1Click);
+    el.addEventListener("click", onButton1Click);
+  });
+
+ 
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.removeEventListener("click", onDiv1Click);
+    el.addEventListener("click", onDiv1Click);
+  });
+}
+
+
+function updateNotificationVisibility() {
+  document.querySelectorAll("[data-el='div-1']").forEach((el) => {
+    el.hidden = !state.notifications; 
+  });
+}
+
+
+document.addEventListener("click", function (event) {
+  const notificationButton = document.querySelector("[data-el='button-1']");
+  const notificationDropdown = document.querySelector("[data-el='div-1']");
+
+  
+  if (state.notifications && notificationButton && notificationDropdown &&
+      !notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+    state.notifications = false;
+    updateNotificationVisibility();
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+  setupNotificationListeners();
+  updateNotificationVisibility(); 
+});
+
+// --- Notification Dropdown Toggle Logic ---
+// This part handles showing/hiding the notification dropdown when the bell icon is clicked.
+document.querySelector('.notification-button').addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.notification-dropdown');
+    dropdown.hidden = !dropdown.hidden;
+    event.stopPropagation(); // Prevent immediate closing from window click listener
+});
+
+// Close dropdown if clicked anywhere outside the notification container
+document.addEventListener('click', function(event) {
+    const notificationContainer = document.querySelector('.notification-container');
+    const dropdown = document.querySelector('.notification-dropdown');
+    if (!notificationContainer.contains(event.target) && !dropdown.hidden) {
+        dropdown.hidden = true;
+    }
+});
+
+
+// --- Event Detail Modal Logic (Updated for #view-event-modal) ---
+let currentEventId = null;// To keep track of the event ID being viewed
+
+// Function to fetch and display event details in the new modal
+function viewEventDetails(eventId) {
+    fetch('get_event_by_id.php?id=' + eventId) // Fetches event data from PHP
+        .then(res => {
+            if (!res.ok) {
+                // If the HTTP response status is not 2xx (e.g., 404, 500)
+                // Throw an error with the status for the catch block to handle
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            return res.json(); // Attempt to parse the response as JSON
+        })
+        .then(eventDataArray => { // CHANGED: Renamed parameter from 'event' to 'eventDataArray'
+            console.log('Event data received (raw array):', eventDataArray);
+
+            // Check if the event data is valid and contains expected data (assuming it's an array)
+            if (!eventDataArray || !Array.isArray(eventDataArray) || eventDataArray.length === 0) {
+                console.warn('Received empty or invalid event data for ID:', eventId);
+                alert('⚠️ Event details not found for this notification. It might have been deleted.');
+                document.getElementById('view-event-modal').hidden = true; // Hide modal if no data
+                return; // Stop execution here
+            }
+
+            // EXTRACT THE SINGLE EVENT OBJECT:
+            const singleEvent = eventDataArray[0]; // CHANGED: Renamed variable from 'event' to 'singleEvent'
+            console.log('Processed event object:', singleEvent);
+
+            currentEventId = eventId;
+
+            // Populate the fields of the NEW modal (#view-event-modal)
+            // Use 'singleEvent' to access properties
+            document.getElementById('view-name').value = singleEvent.name || '';
+            document.getElementById('view-day').value = singleEvent.day || '';
+            document.getElementById('view-date').value = singleEvent.date || '';
+            const formattedTime = formatTimeWithAMPM(singleEvent.time || singleEvent.startTime);
+            document.getElementById("view-time").value = formattedTime;
+            document.getElementById('view-location').value = singleEvent.location || '';
+            // REMOVED: document.getElementById('view-involvement').value = (event.involvement || '').split(',').filter(Boolean).join(', ');
+
+            document.getElementById('view-person').value = singleEvent.person_in_charge || ''; // CORRECTED: from event.personInCharge
+            document.getElementById('view-unit').value = singleEvent.unit || '';
+            document.getElementById('view-status').value = singleEvent.status || '';
+
+            // This part for involvement is correct for a DIV and should remain:
+            const involvementContainer = document.getElementById('view-involvement');
+            // Check if element exists before manipulating
+            if (involvementContainer) {
+                const involvementArr = (singleEvent.involvement || '').split(',').filter(Boolean);
+                involvementContainer.innerHTML = involvementArr.length
+                    ? involvementArr.map(name => `<span class="tag">${name.trim()}</span>`).join(' ')
+                    : '<span class="tag tag-na">N/A</span>';
+            } else {
+                console.warn('Element with ID "view-involvement" not found in the DOM.');
+            }
+
+
+            document.getElementById('view-event-modal').hidden = false;
+        })
+        .catch(err => {
+            // This catch block will now capture errors from network issues AND JSON parsing errors
+            console.error('Error fetching or processing event details for ID', eventId, ':', err);
+
+            let errorMessage = '❌ Failed to load event details. ';
+
+            if (err instanceof TypeError && err.message.includes('JSON')) {
+                errorMessage += 'Invalid data received from server. Check get_events.php output.';
+            } else if (err.message.startsWith('HTTP error!')) {
+                errorMessage += `Server responded with an error: ${err.message}.`;
+            } else {
+                errorMessage += 'Please check the browser console for more information.';
+            }
+            alert(errorMessage); // Show a user-friendly alert
+            document.getElementById('view-event-modal').hidden = true; // Ensure modal is hidden on error
+        });
+}
+function formatTimeWithAMPM(timeStr) {
+    if (!timeStr) return "N/A";
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const adjustedHour = hours % 12 || 12;
+    return `${adjustedHour}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+  }
+// Close the NEW modal when 'x' is clicked
+document.getElementById('view-close-button').onclick = function() {
+    document.getElementById('view-event-modal').hidden = true;
+};
+
+// Close the NEW modal when clicking anywhere outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('view-event-modal');
+    if (event.target === modal) {
+        modal.hidden = true;
+    }
+};
+
+
+
+// Handle delete button click in the NEW modal
+
+
+// --- Notification Badge and Dropdown Population Logic ---
+
+// Function to update the unread notification count badge
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notification-badge');
+    if (count > 0) {
+        badge.textContent = count;
+        badge.style.display = 'inline-block';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// Main function to fetch and display notifications
+function fetchNotifications() {
+    fetch('get_notifications.php') // Fetches notification data from PHP
+        .then(res => res.json())
+        .then(data => {
+            const dropdown = document.querySelector('[data-el="div-1"]');
+            const badgeCount = data.unread_count || 0;
+            updateNotificationBadge(badgeCount); // Update the badge
+
+            let scrollableDiv = dropdown.querySelector('.notification-scroll');
+            let prevScrollTop = scrollableDiv ? scrollableDiv.scrollTop : 0;
+
+            if (data.notifications && data.notifications.length > 0) {
+                // Construct the HTML for notifications within the dropdown
+                dropdown.innerHTML = `
+                    <h3 class="notification-title">Notifications</h3>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        <button id="mark-read-btn" style="background:#008080;color:white;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;">Mark all as read</button>
+                    </div>
+                    <div class="notification-scroll" style="max-height:320px;overflow-y:auto;">
+                        ${data.notifications.map(n => `
+                            <div class="notification-card" style="background:${n.read ? '#fff' : '#ECECEC'};font-weight:${n.read ? 'normal' : 'bold'};margin-bottom:10px;padding:13px 14px 10px 14px;border-radius:9px;box-shadow:0 2px 8px rgba(32,178,170,0.10);cursor:pointer;transition:box-shadow 0.2s;display:flex;flex-direction:column;gap:4px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <span style="text-align:left;color:#008080;font-size:15px;">New event added: ${n.eventName}</span>
+                                </div>
+                                <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:2px;">
+                                    <span style="font-size:12px;color:#888;text-align:right;">${n.eventDate} ${n.eventTime}</span>
+                                </div>
+                                <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:2px;">
+                                    <button style="background:none;border:none;color:#20B2AA;font-size:13px;cursor:pointer;padding:0;" onclick="viewEventDetails(${n.eventId})">View Details</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                // Restore scroll position after content update
+                scrollableDiv = dropdown.querySelector('.notification-scroll');
+                if (scrollableDiv) scrollableDiv.scrollTop = prevScrollTop;
+
+                // Attach event listener for "Mark all as read" button
+                const markBtn = document.getElementById('mark-read-btn');
+                if (markBtn) {
+                    markBtn.onclick = function() {
+                        fetch('mark_notifications_read.php', { method: 'POST' }) // Request to mark all as read
+                            .then(res => res.json())
+                            .then(() => fetchNotifications()); // Refresh notifications after marking
+                    };
+                }
+            } else {
+                // Display "No new notifications" if there are none
+                dropdown.innerHTML = '<h3 class="notification-title">Notifications</h3><p class="notification-message">No new notifications</p>';
+            }
+        });
+}
+
+// --- Background Refresh and Initial Load ---
+// Fetch notifications every 1 second (1000ms)
+setInterval(fetchNotifications, 1000);
+// Fetch notifications when the page initially loads
+document.addEventListener('DOMContentLoaded', fetchNotifications);
+  </script>
 </body>
 </html>
