@@ -1,26 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic styling for the error message */
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        
+    </style>
 </head>
 <body>
 
 <div class="login-box">
-  <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="University Logo">
-  <p>Please enter your details.</p>
+    <img src="https://i.pinimg.com/564x/31/50/bf/3150bf915dad0ce70b152fae9f13cd0f.jpg" alt="University Logo">
+    <p>Please enter your details.</p>
 
-  <form action="login.php" method="post">
-    <input type="text" placeholder="Email" name="email" required>
-    <input type="password" placeholder="Password" name="password" required>
-    <div class="forgot-password">
-      <a href="forgot_password.html">Forgot Password</a>
-    </div>
-    <button type="submit">Login</button>
-  </form>
+    <div id="login-error-message" class="error-message" style="display: none;"></div>
 
+    <form id="loginForm"> <input type="text" placeholder="Email" name="email" required>
+        <input type="password" placeholder="Password" name="password" required>
+        <div class="forgot-password">
+            <a href="forgot_password.html">Forgot Password</a>
+        </div>
+        <button type="submit">Login</button>
+    </form>
 </div>
+
+<script>
+    // Get references to the form and the error message div
+    const loginForm = document.getElementById('loginForm');
+    const loginErrorMessage = document.getElementById('login-error-message');
+
+    // Add an event listener to the form's submit event
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent the default form submission (which causes a page reload)
+
+        // Clear any previous error messages and hide the error div
+        loginErrorMessage.style.display = 'none';
+        loginErrorMessage.textContent = '';
+
+        // Get the form data
+        const formData = new FormData(loginForm);
+
+        try {
+            // Send the form data to login.php using the Fetch API
+            const response = await fetch('login.php', {
+                method: 'POST',
+                body: formData // The FormData object correctly sends data as application/x-www-form-urlencoded
+            });
+
+            // Parse the JSON response from login.php
+            const result = await response.json();
+
+            // Check the 'success' property in the JSON response
+            if (result.success) {
+                // If login is successful, redirect to the appropriate dashboard
+                window.location.href = result.redirect;
+            } else {
+                // If login failed, display the error message from the PHP script
+                loginErrorMessage.textContent = result.message;
+                loginErrorMessage.style.display = 'block'; // Make the error message visible
+            }
+        } catch (error) {
+            // Handle any network or parsing errors
+            console.error('Error during login fetch:', error);
+            loginErrorMessage.textContent = 'An unexpected error occurred. Please try again.';
+            loginErrorMessage.style.display = 'block';
+        }
+    });
+</script>
 
 </body>
 </html>
