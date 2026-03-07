@@ -680,9 +680,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Your Name**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
-- LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
+- GitHub: [RashadulRD786](https://github.com/RashadulRD786)
+- Email: nafisrashadul@gmail.com
+- LinkedIn: [Rashadul Nafis Riyad](https://www.linkedin.com/in/rashadul-nafis-riyad/))
 
 ---
 
@@ -698,7 +698,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email your.email@example.com or create an issue in the repository.
+For support, email nafisrashadul@gmail.com or create an issue in the repository.
 
 ---
 
@@ -709,3 +709,4 @@ For support, email your.email@example.com or create an issue in the repository.
 ⭐ Star this repo if you find it helpful!
 
 </div>
+
