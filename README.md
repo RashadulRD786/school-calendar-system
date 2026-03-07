@@ -637,20 +637,7 @@ Retrieve all users.
 - ✅ Secure email configuration
 - ✅ Role-based access control
 
----
 
-## 📸 Screenshots
-
-> **Note:** Add screenshots of your application here. Include:
-> - Login page
-> - Admin dashboard
-> - Teacher dashboard
-> - Event creation form
-> - Calendar view
-> - Reports page
-> - User management interface
-
----
 
 ## 🤝 Contributing
 
@@ -709,4 +696,5 @@ For support, email nafisrashadul@gmail.com or create an issue in the repository.
 ⭐ Star this repo if you find it helpful!
 
 </div>
+
 
